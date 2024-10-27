@@ -1,19 +1,23 @@
 <div class="register-div">
   <div class="register-text">Registration</div>
-  <form class="register-form">
-    <label>Surname</label>
-    <input type="text"/>
-    <label>Forename</label>
-    <input type="text"/>
+  <form class="register-form" [formGroup]="registerform" (ngSubmit)="onRegister()">
+    <div class="register-div" formGroupName="fullName">
+      <label>Surname</label>
+      <input formControlName="surName" type="text"/>
+      <label>Forename</label>
+      <input formControlName="foreName" type="text"/>
+    </div>
     <label>Birth date</label>
     <input type="date"/>
     <label>Email</label>
-    <input type="email">
+    <input formControlName="email" type="email">
     <label>Password</label>
-    <input type="password"/>
+    <input formControlName="password" type="password"/>
     <label>Password confirm</label>
-    <input type="password"/>
+    <input formControlName="passwordConfirm" type="password"/>
     <button type="submit">Register</button>
   </form>
   <a routerLink="/login">Already registered? To log in Click here!</a>
 </div>
+
+
