@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../services/auth.service';
 
@@ -16,6 +16,7 @@ import {AuthService} from '../../../services/auth.service';
 export class RegisterComponent {
   registerform: FormGroup;
   authService = inject(AuthService)
+  router = inject(Router);
 
   constructor(private formBuilder: FormBuilder) {
     this.registerform = this.formBuilder.group({
@@ -30,7 +31,11 @@ export class RegisterComponent {
   }
 
   onRegister(){
-    // @ts-ignore
-    console.log(this.registerform.get('email').value);
+    const form = this.registerform.getRawValue()
+    this.authService.register(form.email, form.password).subscribe(() =>{
+      console.log(form);
+      console.log("Registered successfully");
+      this.router.navigate(['/']);
+    })
   }
 }

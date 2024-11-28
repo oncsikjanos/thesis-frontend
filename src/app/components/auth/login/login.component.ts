@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import {FormGroup, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
-import {RouterLink} from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,23 @@ import {RouterLink} from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
-  });
+  loginForm: FormGroup;
+  authService = inject(AuthService)
+  router = inject(Router)
+
+  constructor(private formBuilder: FormBuilder) {
+    this.loginForm = this.formBuilder.group({
+      email : ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
 
   onLogin(){
-    console.log(this.loginForm.value);
-    console.log(this.loginForm.valid);
+    const form = this.loginForm.getRawValue();
+    this.authService.login(form.email, form.password).subscribe(() => {
+      console.log(form)
+      console.log("Logged in successfully");
+      this.router.navigate(['/']);
+    })
   }
 }

@@ -16,12 +16,13 @@ export const routes: Routes = [
 const firebaseConfig = {
   apiKey: "",
   authDomain: "",
-  projectId: "t",
-  storageBucket: "",
+  projectId: "",
+  storageBucket: "p",
   messagingSenderId: "",
   appId: "",
   measurementId: ""
 };
+
 
 export const appConfig: ApplicationConfig = {
   providers: [

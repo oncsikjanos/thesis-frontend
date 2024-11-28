@@ -9,44 +9,25 @@ import {
   UserCredential
 } from '@angular/fire/auth';
 import {Observable} from 'rxjs';
+import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  firebaseAuth = inject(Auth)
+  firebaseAuth = inject(Auth);
 
   constructor() { }
 
-  async registerUser(email: string, password: string): Promise<{ user?: UserCredential, error?: any }> {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
-      return { user: userCredential };
-    } catch (error) {
-      return { error };
-    }
+  register(email: string, password: string): Observable<any> {
+    const registerPromise = createUserWithEmailAndPassword(this.firebaseAuth, email, password);
+
+    return fromPromise(registerPromise);
   }
 
-  async logInUser(email: string, password: string): Promise<{ user?: UserCredential, error?: any }> {
-    try {
-      const userCredential = await signInWithEmailAndPassword(this.firebaseAuth, email, password);
-      return { user: userCredential };
-    } catch (error) {
-      return { error };
-    }
-  }
+  login(email: string, password: string): Observable<any> {
+    const loginPromise = signInWithEmailAndPassword(this.firebaseAuth, email, password);
 
-  async signOutUser() {
-    return signOut(this.firebaseAuth);
-  }
-
-  loggedInData(): Promise<User | null> {
-    return new Promise((resolve, reject) => {
-      onAuthStateChanged(this.firebaseAuth, (user) => {
-        resolve(user);
-      }, (error) => {
-        reject(error);
-      });
-    });
+    return fromPromise(loginPromise);
   }
 }
