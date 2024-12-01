@@ -5,7 +5,7 @@ import { provideRouter, Routes } from '@angular/router';
 import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
-import {getAuth, initializeAuth, provideAuth} from '@angular/fire/auth';
+import {getAuth, provideAuth} from '@angular/fire/auth';
 import {provideHttpClient} from '@angular/common/http';
 
 export const routes: Routes = [
@@ -17,12 +17,11 @@ const firebaseConfig = {
   apiKey: "",
   authDomain: "",
   projectId: "",
-  storageBucket: "p",
+  storageBucket: "",
   messagingSenderId: "",
   appId: "",
   measurementId: ""
 };
-
 
 export const appConfig: ApplicationConfig = {
   providers: [

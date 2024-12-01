@@ -1,14 +1,12 @@
 <div class="register-div">
   <div class="register-text">Registration</div>
-  <form class="register-form" [formGroup]="registerform" (ngSubmit)="onRegister()">
-    <div class="register-div" formGroupName="fullName">
-      <label>Surname</label>
-      <input formControlName="surName" type="text"/>
-      <label>Forename</label>
-      <input formControlName="foreName" type="text"/>
-    </div>
+  <form class="register-form" [formGroup]="registerform" (ngSubmit)="testDatabase()">
+    <label>First name</label>
+    <input formControlName="firstName" type="text"/>
+    <label>Last name</label>
+    <input formControlName="lastName" type="text"/>
     <label>Birth date</label>
-    <input type="date"/>
+    <input formControlName="dateOfBirth" type="date"/>
     <label>Email</label>
     <input formControlName="email" type="email">
     <label>Password</label>
