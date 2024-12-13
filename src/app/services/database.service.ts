@@ -3,8 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../model/User';
 
-const API = '';
-const REGISTER = '';
+const API = 'http://localhost:5050';
+const REGISTER = '/addUser';
 
 @Injectable({
   providedIn: 'root'

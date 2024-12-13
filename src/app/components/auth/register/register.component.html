@@ -1,21 +1,25 @@
 <div class="register-div">
-  <div class="register-text">Registration</div>
   <form class="register-form" [formGroup]="registerform" (ngSubmit)="testDatabase()">
-    <label>First name</label>
-    <input formControlName="firstName" type="text"/>
-    <label>Last name</label>
-    <input formControlName="lastName" type="text"/>
-    <label>Birth date</label>
-    <input formControlName="dateOfBirth" type="date"/>
-    <label>Email</label>
-    <input formControlName="email" type="email">
-    <label>Password</label>
-    <input formControlName="password" type="password"/>
-    <label>Password confirm</label>
-    <input formControlName="passwordConfirm" type="password"/>
+    <div class="input-group">
+      <input formControlName="firstName" name="firstName" type="text" placeholder="First name" required/>
+    </div>
+    <div class="input-group">
+      <input formControlName="lastName" name="lastName" type="text" placeholder="Last name" required/>
+    </div>
+    <div class="input-group">
+      <input formControlName="dateOfBirth" type="date" required/>
+    </div>
+    <div class="input-group">
+      <input formControlName="email" name="email" type="email" placeholder="Email" required>
+    </div>
+    <div class="input-group">
+      <input formControlName="password" name="password" type="password" placeholder="Password" required/>
+    </div>
+    <div class="input-group">
+      <input formControlName="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confrim password" required/>
+    </div>
     <button type="submit">Register</button>
   </form>
-  <a routerLink="/login">Already registered? To log in Click here!</a>
 </div>
 
 

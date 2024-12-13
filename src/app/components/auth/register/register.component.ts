@@ -54,13 +54,13 @@ export class RegisterComponent {
     };
 
     console.log(user);
-    /*this.databaseService.register(user).subscribe({
+    this.databaseService.register(user).subscribe({
       next: (response) => {
         console.log('Response:', response);
       },
       error: (err) => {
         console.error('Error:', err);
       }
-    });*/
+    });
   }
 }
