@@ -48,14 +48,11 @@
   padding: 12px;
   background-color: #1dbf73; // Fiverr's green color
   color: white;
+  margin-top: 16px;
   border-radius: 4px;
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0.5px;
-
-  &:disabled {
-    background-color: rgba(29, 191, 115, 0.6);
-  }
 }
 
 .register-link {
@@ -69,13 +66,10 @@
   align-items: center;
   width: 100%;
   padding-right: 0px;
-
-  // Add these new properties
   position: absolute;
   right: 0;
-  margin-bottom: 4px;
 }
+
 .nogap {
   margin-bottom: 0px;
 }
-// Remove input-field2 as we can reuse input-field

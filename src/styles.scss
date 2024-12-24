@@ -1,8 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 /* Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+    color: mat.$spring-green-palette,
+    typography: Poppins,
+    density: 0
+    )
+  );
+}
 
 * {
   margin: 0;
@@ -10,3 +18,6 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';

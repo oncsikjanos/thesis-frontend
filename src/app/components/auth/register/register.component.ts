@@ -7,7 +7,6 @@ import {User} from '../../../model/User';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule
