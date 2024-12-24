@@ -1,11 +1,26 @@
 <div class="login-div">
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-    <div class="input-group">
-      <input type="email" formControlName="email" name="email" placeholder="Email" required>
+    <div class="login-title">
+      LogIn
     </div>
-    <div class="input-group">
-      <input type="password" formControlName="password" name="password" placeholder="Password" required>
+    <mat-form-field class="input-field" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" name="email" placeholder="Email" required>
+      <mat-icon matPrefix>account_circle</mat-icon>
+    </mat-form-field>
+    <mat-form-field class="input-field nogap" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password" name="password" placeholder="Password" required>
+      <mat-icon matPrefix>key</mat-icon>
+      <mat-hint class="password-forgot">
+          <a routerLink="forgot-password">Forgot Password?</a>
+      </mat-hint>
+    </mat-form-field>
+    <button class="submit-btn" mat-flat-button  color="primary" type="submit"  [disabled]="!loginForm.valid">
+      Login
+    </button>
+    <div class="register-link">
+      You don't have an account? <a routerLink="register">Register</a>
     </div>
-    <button type="submit" [disabled]="!loginForm.valid">Login</button>
   </form>
 </div>

@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, Routes } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations'
 
 //import * as path from 'node:path';
 import {LoginComponent} from './components/auth/login/login.component';
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    provideAnimations()
   ]
 };

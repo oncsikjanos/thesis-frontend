@@ -9,16 +9,15 @@ import { RegisterComponent } from './register/register.component';
   imports: [CommonModule, LoginComponent, RegisterComponent],
   styleUrl: './auth.component.scss',
   template: `
-    <div class="auth-container">
-      <div class="form-container">
-        <div class="tabs">
+      <div class="auth-container">
+        <!--<div class="tabs">
           <button [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Login</button>
           <button [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">Register</button>
         </div>
         <app-login *ngIf="activeTab === 'login'"></app-login>
-        <app-register *ngIf="activeTab === 'register'"></app-register>
+        <app-register *ngIf="activeTab === 'register'"></app-register>-->
+        <app-login></app-login>
       </div>
-    </div>
   `
 })
 export class AuthComponent {
