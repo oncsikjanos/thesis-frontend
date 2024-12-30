@@ -1,21 +1,3 @@
-@use '@angular/material' as mat;
-
-/*.login-form{
-  width: 95%;
-  display: flex;
-  flex-direction: column;
-  background: yellow;
-  margin: auto;
-}
-
-.input-field {
-  @include mat.all-component-densities(-1);
-}
-
-.input-field2 {
-  @include mat.all-component-densities(-1);
-}*/
-
 .login-div {
   display: flex;
   flex-direction: column;
@@ -28,6 +10,7 @@
   font-size: 24px;
   font-weight: bold;
   text-align: center;
+  margin-bottom: 40px;
 }
 
 .login-form {
@@ -72,4 +55,35 @@
 
 .nogap {
   margin-bottom: 0px;
+}
+
+a{
+  cursor: pointer;
+  color: #1dbf73;
+  text-decoration: underline;
+}
+
+.divider {
+  width: 80%;
+  margin: 20px auto;
+  text-align: center;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 30px);  // Adjust 30px based on your needs
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.12);  // Material default divider color
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
 }

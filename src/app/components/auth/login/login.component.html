@@ -7,6 +7,12 @@
       <mat-label>Email</mat-label>
       <input type="email" matInput formControlName="email" name="email" placeholder="Email" required>
       <mat-icon matPrefix>account_circle</mat-icon>
+      @if (emailErrors.required) {
+        <mat-error>{{errorMessages.AUTH.EMAIL.REQUIRED}}</mat-error>
+      }
+      @if (emailErrors.email) {
+        <mat-error>{{errorMessages.AUTH.EMAIL.INVALID}}</mat-error>
+      }
     </mat-form-field>
     <mat-form-field class="input-field nogap" appearance="outline">
       <mat-label>Password</mat-label>
@@ -15,12 +21,18 @@
       <mat-hint class="password-forgot">
           <a routerLink="forgot-password">Forgot Password?</a>
       </mat-hint>
+      @if (passwordErrors.required) {
+        <mat-error>{{errorMessages.AUTH.PASSWORD.REQUIRED}}</mat-error>
+      }
     </mat-form-field>
-    <button class="submit-btn" mat-flat-button  color="primary" type="submit"  [disabled]="!loginForm.valid">
+    <button class="submit-btn" mat-flat-button  color="primary" type="submit">
       Login
     </button>
+    <div class="divider">
+      <div class="divider-text">OR</div>
+    </div>
     <div class="register-link">
-      You don't have an account? <a routerLink="register">Register</a>
+      You don't have an account? <a (click)="onRegisterClick($event)">Register</a>
     </div>
   </form>
 </div>

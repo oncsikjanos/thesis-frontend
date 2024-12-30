@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {Observable, tap} from 'rxjs';
 import {User} from '../model/User';
 
 const API = 'http://localhost:5050';
-const REGISTER = '/addUser';
+const GET_USER = '/getUser';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,18 @@ export class DatabaseService {
 
   constructor(private http: HttpClient) { }
 
-  register(user: User) : Observable<any>{
-    console.log('POST URL:', API+REGISTER);
-    console.log('POST Data:', user);
-    return this.http.post(API+REGISTER, user,
-      {headers: { 'Content-Type': 'application/json' }
-      });
+  getUser(): Observable<any> {
+    return this.http.get<User>(API + GET_USER, {
+      observe: 'response',
+      withCredentials: true
+    }).pipe(
+      tap({
+        next: (response: HttpResponse<any>) => {
+        },
+        error: (error) => {
+        }
+      })
+    );
   }
+  
 }

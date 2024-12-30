@@ -1,25 +1,110 @@
 <div class="register-div">
-  <form class="register-form" [formGroup]="registerform" (ngSubmit)="testDatabase()">
-    <div class="input-group">
-      <input formControlName="firstName" name="firstName" type="text" placeholder="First name" required/>
+  <div class="register-title">
+    Register
+  </div>
+  <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <div class="register-form-fields">
+      <mat-form-field class="input-field" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" name="name" placeholder="Name" required>
+        <mat-icon matPrefix>account_circle</mat-icon>
+        @if (nameErrors.required) {
+          <mat-error>{{errorMessages.AUTH.NAME.REQUIRED}}</mat-error>
+        }
+        @if (nameErrors.length) {
+          <mat-error>{{errorMessages.AUTH.NAME.MIN_LENGTH}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="input-field" appearance="outline">
+        <mat-label>Birth date</mat-label>
+        <input  matInput formControlName="dateOfBirth" 
+        name="dateOfBirth" 
+        [min]="minDate"
+        [max]="maxDate"
+        required
+        [matDatepicker]="picker" 
+        (click)="picker.open()">
+        <mat-icon matPrefix>cake</mat-icon>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker disabled="false"></mat-datepicker>
+        <mat-hint>YYYY.MM.DD.</mat-hint>
+        @if (dateOfBirthErrors.required) {
+          <mat-error>{{errorMessages.AUTH.DATE_OF_BIRTH.REQUIRED}}</mat-error>
+        }
+        @if (dateOfBirthErrors.min) {
+          <mat-error>{{errorMessages.AUTH.DATE_OF_BIRTH.MIN}}</mat-error>
+        }
+        @if (dateOfBirthErrors.max) {
+          <mat-error>{{errorMessages.AUTH.DATE_OF_BIRTH.MAX}}</mat-error>
+        }
+        @if (dateOfBirthErrors.format) {
+          <mat-error>{{errorMessages.AUTH.DATE_OF_BIRTH.FORMAT}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="input-field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email" name="email" placeholder="Email" required>
+        <mat-icon matPrefix>mail</mat-icon>
+        @if (emailErrors.required) {
+          <mat-error>{{errorMessages.AUTH.EMAIL.REQUIRED}}</mat-error>
+        }
+        @if (emailErrors.email) {
+          <mat-error>{{errorMessages.AUTH.EMAIL.INVALID}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="input-field" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password" name="password" placeholder="Password" required>
+        <mat-icon matPrefix>key</mat-icon>
+        @if (passwordErrors.required) {
+          <mat-error>{{errorMessages.AUTH.PASSWORD.REQUIRED}}</mat-error>
+        }
+        @if (passwordErrors.requirements) {
+          <mat-error>{{errorMessages.AUTH.PASSWORD.REQUIREMENTS}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="input-field" appearance="outline">
+        <mat-label>Confirm password</mat-label>
+        <input type="password" matInput formControlName="passwordConfirm" name="passwordConfirm" placeholder="Confrim password" required>
+        <mat-icon matPrefix>key</mat-icon>
+        @if (passwordErrors.required) {
+          <mat-error>{{errorMessages.AUTH.PASSWORD.REQUIRED}}</mat-error>
+        }
+        @if (passwordErrors.requirements) {
+          <mat-error>{{errorMessages.AUTH.PASSWORD.REQUIREMENTS}}</mat-error>
+        }
+      </mat-form-field>
     </div>
-    <div class="input-group">
-      <input formControlName="lastName" name="lastName" type="text" placeholder="Last name" required/>
+    <!-- New password criteria checker -->
+    <div class="password-criteria">
+      <h3>Password Requirements</h3>
+      <ul>
+        <li [class.met]="passwordCriteria.length">
+          <mat-icon>{{ passwordCriteria.length ? 'check_circle' : 'cancel' }}</mat-icon>
+          At least 8 characters long
+        </li>
+        <li [class.met]="passwordCriteria.number">
+          <mat-icon>{{ passwordCriteria.number ? 'check_circle' : 'cancel' }}</mat-icon>
+          Contains a number
+        </li>
+        <li [class.met]="passwordCriteria.uppercase">
+          <mat-icon>{{ passwordCriteria.uppercase ? 'check_circle' : 'cancel' }}</mat-icon>
+          Contains an uppercase letter
+        </li>
+        <li [class.met]="passwordCriteria.matching">
+          <mat-icon>{{ passwordCriteria.matching ? 'check_circle' : 'cancel' }}</mat-icon>
+          Passwords match
+        </li>
+      </ul>
     </div>
-    <div class="input-group">
-      <input formControlName="dateOfBirth" type="date" required/>
-    </div>
-    <div class="input-group">
-      <input formControlName="email" name="email" type="email" placeholder="Email" required>
-    </div>
-    <div class="input-group">
-      <input formControlName="password" name="password" type="password" placeholder="Password" required/>
-    </div>
-    <div class="input-group">
-      <input formControlName="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confrim password" required/>
-    </div>
-    <button type="submit">Register</button>
   </form>
+  <button class="submit-btn" mat-flat-button  color="primary" type="submit" (click)="onRegister()">
+    Register
+  </button>
+  <div class="divider">
+    <div class="divider-text">OR</div>
+  </div>
+  <div class="register-link">
+    You already have an account? <a class="register-redirect" (click)="this.authShowEvent.emit('login')">Log in</a>
+  </div>
 </div>
-
-

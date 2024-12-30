@@ -1,14 +1,38 @@
-<div>
-  @if(0 > 1){
-    <div>
-      Logged In
-    </div>
-    <div>
-      Log Out
-    </div> 
-  } @else {
-    <div>
-      Logged out
-    </div>
-  }
+<div class="navigation-bar">
+  <button class="nav-element user-name">
+    <mat-icon class="nav-element-icon">person</mat-icon>
+    <div class="nav-element-text">{{authService.currentUserSignal()?.name}}</div>
+  </button>
+  <div class="nav-content">
+    <button class="nav-element">
+      <mat-icon class="nav-element-icon">library_books</mat-icon>
+      <div class="nav-element-text">My exams</div>
+    </button>
+    <button class="nav-element">
+      <mat-icon class="nav-element-icon">bookmark_add</mat-icon>
+      <div class="nav-element-text">Take exam</div>
+    </button>
+    <button class="nav-element">
+      <mat-icon class="nav-element-icon">trending_up</mat-icon>
+      <div class="nav-element-text">Results</div>
+    </button>
+    <button class="nav-element">
+      <mat-icon class="nav-element-icon">calendar_month</mat-icon>
+      <div class="nav-element-text">Calendar</div>
+    </button>
+    @if (authService.currentUserSignal()?.role?.toLocaleLowerCase() === "student"){
+      <button class="nav-element">
+        <mat-icon class="nav-element-icon">add</mat-icon>
+        <div class="nav-element-text">New exam</div>
+      </button>
+      <button class="nav-element">
+        <mat-icon class="nav-element-icon">shield_person</mat-icon>
+        <div class="nav-element-text">Administration</div>
+      </button>
+    }
+</div>
+  <button class="nav-element logout-button" (click)="logout()">
+    <mat-icon class="nav-element-icon">logout</mat-icon>
+    <div class="nav-element-text">Logout</div>
+  </button>
 </div>

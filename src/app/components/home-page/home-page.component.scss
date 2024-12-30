@@ -1,0 +1,18 @@
+.home-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #ebebeb;
+  }
+  .navigation-bar {
+    margin: 10px;
+  }
+
+  .home-content {
+    width: 100%;
+    min-height: 100%;
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px;
+  }

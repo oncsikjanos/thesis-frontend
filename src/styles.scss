@@ -5,9 +5,10 @@
 html {
   @include mat.theme(
     (
-    color: mat.$spring-green-palette,
+    color: mat.$green-palette,
     typography: Poppins,
-    density: 0
+    density: -1,
+    gap: 0px
     )
   );
 }
@@ -19,5 +20,9 @@ html {
   font-family: 'Poppins', sans-serif;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+:root {
+  @include mat.snack-bar-overrides((
+    container-color: white,
+    supporting-text-color: black,
+  ));
+}

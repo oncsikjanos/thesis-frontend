@@ -10,16 +10,16 @@ import { RegisterComponent } from './register/register.component';
   styleUrl: './auth.component.scss',
   template: `
       <div class="auth-container">
-        <!--<div class="tabs">
-          <button [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Login</button>
-          <button [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">Register</button>
-        </div>
-        <app-login *ngIf="activeTab === 'login'"></app-login>
-        <app-register *ngIf="activeTab === 'register'"></app-register>-->
-        <app-login></app-login>
+        <app-login *ngIf="activeTab === 'login'" (authShowEvent)="authShow($event)"></app-login>
+        <app-register *ngIf="activeTab === 'register'" (authShowEvent)="authShow($event)"></app-register>
       </div>
   `
 })
 export class AuthComponent {
   activeTab: 'login' | 'register' = 'login';
+
+  authShow(show: string) {
+    this.activeTab = show === 'register' ? 'register' : 'login';
+  }
+
 }

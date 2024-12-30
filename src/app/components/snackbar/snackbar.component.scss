@@ -1,0 +1,27 @@
+.snackbar-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: 100%;
+  align-items: center;
+}
+
+.snackbar-icon {
+  margin-right: 8px;
+}
+
+.snackbar-message {
+  text-align: center;
+  padding-right: 24px; // To offset the icon space and center the text
+}
+
+.error {
+  mat-icon {
+    color: #f44336;
+  }
+}
+
+.success {
+  mat-icon {
+    color: #1dbf73;
+  }
+}
