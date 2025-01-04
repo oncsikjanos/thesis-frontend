@@ -1,0 +1,53 @@
+.video-stream {
+    width: 400px;
+    height: 400px;
+    background-color: gray;
+}
+
+.video-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.videochat{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.local-video {
+    width: 400px;
+    height: 400px;
+}
+
+video {
+    pointer-events: none;  // This disables all mouse interactions
+  }
+
+  .device-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 10px;
+  }
+
+  .device-container-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    gap: 10px;
+  }

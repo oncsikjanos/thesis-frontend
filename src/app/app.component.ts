@@ -28,16 +28,16 @@ export class AppComponent {
             dateOfBirth: stateMessage.body.user.dateOfBirth,
             role: stateMessage.body.user.role
           });
-          this.router.navigate(['/']);
+          //this.router.navigate(['/']);
         }
         else{
           this.authService.currentUserSignal.set(null);
-          this.router.navigate(['/auth']);
+          //this.router.navigate(['/auth']);
         }
       },
       error: (err) => {
         this.authService.currentUserSignal.set(null);
-        this.router.navigate(['/auth']);
+        //this.router.navigate(['/auth']);
       }
     })
   }

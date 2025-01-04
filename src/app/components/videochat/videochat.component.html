@@ -1,0 +1,50 @@
+<div class="videochat">
+    <div class="video-container">
+        <div class="video-stream">
+            <video class="local-video" #localVideo autoplay playsinline controls="false" [muted]="true"></video>
+        </div>
+        <div class="video-stream">
+            <video class="remote-video" #remoteVideo autoplay playsinline controls="false"></video>
+        </div>
+    </div>
+    <div class="button-container">
+        @if (this.isCameraOn) {
+            <button class="end-call" (click)="stopCamera()">Stop Camera</button>
+        }@else {
+            <button class="start-call" (click)="startCamera()">Set camera</button>
+        }
+        @if (this.isMuted) {
+            <button class="mute" (click)="muteToggle()">Mute</button>
+        } @else {
+            <button class="unmute" (click)="muteToggle()">Unmute</button>
+        }
+    </div>
+    <div class="device-container">
+        <div class="device-container-item">
+            <select name="cameras" id="cameras" (change)="changeCamera($event)">
+                <optgroup label="Cameras">
+                    @for (camera of connectedCameras; track camera.deviceId) {
+                        <option [value]="camera.deviceId">{{camera.label}}</option>
+                    }
+                </optgroup>
+            </select>
+        </div>
+        <div class="device-container-item">
+            <div class="device-container-item">
+                <select name="microphones" id="microphones" (change)="changeMicrophone($event)">
+                    <optgroup label="Microphones">
+                        @for (microphone of connectedMicrophones; track microphone.deviceId) {
+                            <option [value]="microphone.deviceId">{{microphone.label}}</option>
+                        }
+                    </optgroup>
+                </select>
+            </div>
+          </div>
+    </div>
+
+    <div class="user-email">
+        <button (click)="joinRoomUser(this.localID1, this.localID2)">User1 join</button>
+        <button (click)="joinRoomUser(this.localID2, this.localID1)">user2 join</button>
+      <button (click)="sendMessage()">Send message</button>
+    </div>
+</div>
