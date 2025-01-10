@@ -19,7 +19,7 @@ export class SignalingService {
     });
 
     this.socket.on('error', (error: any) => {
-      console.error('Socket error:', error);
+      console.error(error);
     });
   }
 

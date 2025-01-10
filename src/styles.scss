@@ -25,4 +25,29 @@ html {
     container-color: white,
     supporting-text-color: black,
   ));
+
+  @include mat.stepper-overrides((
+    container-color: white,
+    //supporting-text-color: black,
+  ));
+
+  @include mat.card-overrides((
+    container-color: white,
+    //supporting-text-color: black,
+  ));
+
+  @include mat.select-overrides((
+    panel-background-color: white,
+    //supporting-text-color: black,
+  ));
+
+  @include mat.expansion-overrides((
+    container-background-color: white,
+    //supporting-text-color: black,
+  ));
+
+  @include mat.form-field-overrides((
+    filled-container-color: white,
+    //supporting-text-color: black,
+  ));
 }

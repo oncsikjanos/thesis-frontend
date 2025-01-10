@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })

@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import {LoginComponent} from './components/auth/login/login.component';
-import {NavbarComponent} from './components/navbar/navbar.component';
 import { DatabaseService } from './services/database.service';
 import { AuthService } from './services/auth.service';
 
@@ -32,12 +30,12 @@ export class AppComponent {
         }
         else{
           this.authService.currentUserSignal.set(null);
-          //this.router.navigate(['/auth']);
+          this.router.navigate(['/auth']);
         }
       },
-      error: (err) => {
+      error: () => {
         this.authService.currentUserSignal.set(null);
-        //this.router.navigate(['/auth']);
+        this.router.navigate(['/auth']);
       }
     })
   }

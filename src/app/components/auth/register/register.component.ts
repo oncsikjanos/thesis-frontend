@@ -79,12 +79,12 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8)]]
     });
-    
+
         // Subscribe to password changes
         this.registerForm.get('password')?.valueChanges.subscribe(password => {
           this.checkPasswordCriteria(password);
         });
-    
+
         // Subscribe to password confirmation changes
         this.registerForm.get('passwordConfirm')?.valueChanges.subscribe(() => {
           this.checkPasswordsMatch();
@@ -99,7 +99,7 @@ export class RegisterComponent {
       return;
     }
 
-    if(this.checkRegisterValuesNotValid(form)){
+    if(this.checkRegisterValuesNotValid()){
       this.createSnackbar(this.errorMessages.AUTH.GENERIC.NOT_VALID, 'cancel', 'error');
       return;
     }
@@ -119,7 +119,7 @@ export class RegisterComponent {
   }
 
   createSnackbar(message: string, icon: string, type: string){
-    let snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+    this.snackBar.openFromComponent(SnackbarComponent, {
       data: {
         message: message,
         icon: icon,
@@ -135,7 +135,7 @@ export class RegisterComponent {
     return Object.values(form).every(value => value === '');
   }
 
-  checkRegisterValuesNotValid(form: any){
+  checkRegisterValuesNotValid(){
     if(!this.nameErrors.required || !this.nameErrors.length){
       return false;
     }
@@ -219,10 +219,10 @@ export class RegisterComponent {
     const control = this.registerForm.get('password');
     return {
       required: control?.hasError('required') && control?.touched,
-      requirements: !(this.passwordCriteria.length && 
-        this.passwordCriteria.number && 
-        this.passwordCriteria.uppercase && 
-        this.passwordCriteria.matching) && 
+      requirements: !(this.passwordCriteria.length &&
+        this.passwordCriteria.number &&
+        this.passwordCriteria.uppercase &&
+        this.passwordCriteria.matching) &&
         control?.touched && !control?.hasError('required')
     };
   }

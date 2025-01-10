@@ -1,0 +1,66 @@
+<mat-stepper class="new-exam-stepper">
+    <mat-step label="Exam basic informations">
+        <div class="exam-basic-informations-container">
+            <form class="exam-basic-informations-form" [formGroup]="newExamForm" (ngSubmit)="onNext()">
+                <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                    <mat-label>Subject</mat-label>
+                    <input type="text"
+                           placeholder="Pick one"
+                           aria-label="Subject"
+                           matInput
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                      @for (subject of getSubjects(); track subject) {
+                        <mat-option [value]="subject">{{subject}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                    <mat-label>Exam start date</mat-label>
+                    <input matInput type="date" placeholder="Exam start date">
+                </mat-form-field>
+                <mat-form-field class="exam-basic-informations-form-field"appearance="outline">
+                    <mat-label>Exam start time</mat-label>
+                    <input matInput type="time" placeholder="Exam start time">
+                </mat-form-field>
+                <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                    <mat-label>Exam duration</mat-label>
+                    <input matInput type="time" placeholder="Exam duration">
+                </mat-form-field>
+                <button class="exam-basic-informations-form-submit-button" mat-flat-button color="primary" type="submit">
+                    Next
+                </button>
+            </form>
+        </div>
+    </mat-step>
+    <mat-step label="Exam questions">
+        <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+                <mat-icon class="add-question-icon">quiz</mat-icon>
+                <div class="gapper"></div>
+                <div class="add-question-title">Add a new question</div>
+            </mat-expansion-panel-header>
+            <form class="add-question-form">
+                <mat-form-field class="add-question-form-field" appearance="outline">
+                    <mat-label>Exam type</mat-label>
+                    <mat-select>
+                        @for (examType of getExamTypes(); track examType) {
+                            <mat-option [value]="examType">{{examType}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <button class="add-question-form-submit-button">
+                    <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
+                </button>
+            </form>
+        </mat-expansion-panel>
+        <div class="gapper"></div>
+        <div class="questions-container">
+            <app-multiple-choice></app-multiple-choice>
+            <app-yes-no></app-yes-no>
+        </div>
+    </mat-step>
+    <mat-step label="Done">
+
+    </mat-step>
+</mat-stepper>

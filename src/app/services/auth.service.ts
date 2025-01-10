@@ -1,7 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 import {User} from '../model/User';
 import {RegisterData} from '../model/RegisterData';
 import { Router } from '@angular/router';
@@ -63,7 +62,7 @@ export class AuthService {
         })
       );
   }
-  
+
   isLoggedIn(): boolean {
     return this.currentUserSignal() !== null;
   }

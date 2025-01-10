@@ -20,12 +20,12 @@
       <mat-icon class="nav-element-icon">calendar_month</mat-icon>
       <div class="nav-element-text">Calendar</div>
     </button>
-    @if (authService.currentUserSignal()?.role?.toLocaleLowerCase() === "student"){
-      <button class="nav-element">
+    @if (authService.currentUserSignal()?.role === "Student"){
+      <button class="nav-element" routerLink="/newexam" routerLinkActive="active">
         <mat-icon class="nav-element-icon">add</mat-icon>
         <div class="nav-element-text">New exam</div>
       </button>
-      <button class="nav-element">
+      <button class="nav-element" routerLink="/admin" routerLinkActive="active">
         <mat-icon class="nav-element-icon">shield_person</mat-icon>
         <div class="nav-element-text">Administration</div>
       </button>

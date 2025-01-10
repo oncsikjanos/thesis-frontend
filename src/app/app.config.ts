@@ -5,13 +5,23 @@ import {provideHttpClient} from '@angular/common/http';
 import {AuthComponent} from './components/auth/auth.component';
 import { AuthGuard, LoginGuard } from './services/auth-guard.service';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import {AuthInterceptor} from './services/interceptor/auth.interceptor';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { VideochatComponent } from './components/videochat/videochat.component';
+import { AdministrationComponent } from './components/administration/administration.component';
+import { NewExamComponent } from './components/new-exam/new-exam.component';
+import {MultipleChoiceComponent} from './components/new-exam/multiple-choice/multiple-choice.component';
+import {YesNoComponent} from './components/new-exam/yes-no/yes-no.component';
+
 export const routes: Routes = [
   {path: 'auth', component: AuthComponent, canActivate: [LoginGuard]},
-  {path: '', component: HomePageComponent, canActivate: [AuthGuard]},
-  {path: 'videochat', component: VideochatComponent}
+  {path: '', component: HomePageComponent, canActivate: [AuthGuard],
+    children: [
+      {path: 'admin', component: AdministrationComponent},
+      {path: 'newexam', component: NewExamComponent},
+      {path: 'videochat', component: VideochatComponent}
+    ]
+  },
+  {path: 'multiple', component: MultipleChoiceComponent},
+  {path: 'yesno', component: YesNoComponent},
 ];
 
 export const appConfig: ApplicationConfig = {

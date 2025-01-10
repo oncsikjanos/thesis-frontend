@@ -1,5 +1,5 @@
-import {Component, EventEmitter, inject, Output, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
+import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {FormGroup, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -49,7 +49,7 @@ export class LoginComponent{
       return;
     }
 
-    else if(!this.checkEmailValid(form)){
+    else if(!this.checkEmailValid()){
       this.createSnackbar(this.errorMessages.AUTH.EMAIL.INVALID, 'cancel', 'error');
       return;
     }
@@ -68,7 +68,7 @@ export class LoginComponent{
   }
 
   createSnackbar(message: string, icon: string, type: string){
-    let snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+    this.snackBar.openFromComponent(SnackbarComponent, {
       data: {
         message: message,
         icon: icon,
@@ -93,7 +93,7 @@ export class LoginComponent{
     return true;
   }
 
-  checkEmailValid(form: any){
+  checkEmailValid(){
     const control = this.loginForm.get('email');
     if(control?.hasError('email') && control?.touched && !control?.hasError('required')){
       return false;

@@ -1,0 +1,41 @@
+.new-exam-stepper {
+    min-height: 100%;
+    background-color: white;
+    margin: 10px;
+}
+
+.exam-basic-informations-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.exam-basic-informations-form-field {
+    width: 80%;
+    align-self: center;
+}
+
+.exam-basic-informations-form-submit-button {
+    width: 50%;
+    align-self: center;
+}
+
+.exam-basic-informations-container{
+    margin-top: 10%;
+    height: 100%;
+    width: 100%;
+}
+
+mat-stepper {
+    background-color: white;
+}
+
+.add-question-form-submit-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }

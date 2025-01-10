@@ -54,7 +54,7 @@ export class WebrtcService {
             callback(stream);
         })
         .catch(error => {
-            console.error('Error accessing media devices.', error);
+            console.error(error);
         })
   }
 
@@ -99,7 +99,7 @@ export class WebrtcService {
       await this.peerConnection.addIceCandidate(candidate);
       console.log('Successfully added ice candidate');
     } catch (e) {
-      console.error('Error adding received ice candidate', e);
+      console.error(e);
     }
   }
 

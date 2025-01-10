@@ -2,7 +2,6 @@ import { Component, inject, ViewChild, ElementRef} from '@angular/core';
 import { WebrtcService } from '../../services/webrtc.service';
 import { FormsModule } from '@angular/forms';
 import { SignalingService } from '../../services/signaling.service';
-import {user} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-videochat',

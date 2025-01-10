@@ -18,11 +18,17 @@
   background-color: transparent;
   border: none;
   font-size: 16px;
+  border-radius: 8px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.04);
     outline: none;
   }
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
 }
 
 .nav-element-icon {
