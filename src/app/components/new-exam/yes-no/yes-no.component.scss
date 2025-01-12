@@ -1,13 +1,11 @@
-.question-button{
-  display: flex;
-  flex-direction: row;
-}
+/* question-options, question-option, button-toggle-group, option-text, remove-button*/
 
 .remove-button{
   background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: red;
 }
 
 .question-options{
@@ -24,45 +22,7 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
-}
-
-.question-container{
-  width: 800px
-}
-
-.question-image{
-  max-width: 400px;
-  max-height: 200px;
-}
-
-.question-image-container{
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.question-title{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.question-title-container{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  gap: 10px;
-  font-size: 24px;
-}
-
-.question-number{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 10px auto;
 }
 
 .question-header{
@@ -70,36 +30,6 @@
   flex-direction: column;
 }
 
-.question-button-holder{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-.picture-button-container{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-  align-items: center;
-}
-.delete-picture-button .button-text{
-  color:red;
-}
-.delete-picture-button:hover{
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-.remove-button{
-  color: red;
-}
-
-.question-title{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 .option-text{
   width: 80%;
   border: 1px solid #ccc;
@@ -108,14 +38,7 @@
   outline: none;
 
   &:focus {
-    border-color: #3f51b5; /* Material primary color */
-    box-shadow: 0 0 3px rgba(63, 81, 181, 0.5);
+    border-color: rgb(2, 110, 0);
+    box-shadow: 0 0 3px rgba(2, 110, 0, 0.5);
   }
-}
-
-.mat-button-toggle-group {
-  display: flex;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
 }

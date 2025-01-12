@@ -32,7 +32,7 @@ html {
   ));
 
   @include mat.card-overrides((
-    container-color: white,
+    elevated-container-color: white,
     //supporting-text-color: black,
   ));
 

@@ -10,23 +10,46 @@
                            matInput
                            [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete">
-                      @for (subject of getSubjects(); track subject) {
+                      @for(subject of getSubjects(); track subject) {
                         <mat-option [value]="subject">{{subject}}</mat-option>
                       }
                     </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
-                    <mat-label>Exam start date</mat-label>
-                    <input matInput type="date" placeholder="Exam start date">
+                    <mat-label>Exam  date:</mat-label>
+                    <input matInput placeholder="Exam start date" [matDatepicker]="datePicker">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field class="exam-basic-informations-form-field"appearance="outline">
-                    <mat-label>Exam start time</mat-label>
-                    <input matInput type="time" placeholder="Exam start time">
+              <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                <mat-label>Exam startable from:</mat-label>
+                <input matInput placeholder="Exam startable from" [matTimepicker]="startTimePicker">
+                <mat-timepicker-toggle matIconSuffix [for]="startTimePicker"/>
+                <mat-timepicker #startTimePicker/>
+              </mat-form-field>
+                <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                    <mat-label>Exam startable till</mat-label>
+                    <input matInput placeholder="Exam startable till" [matTimepicker]="tillTimePicker">
+                    <mat-timepicker-toggle matIconSuffix [for]="tillTimePicker"/>
+                    <mat-timepicker #tillTimePicker/>
                 </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                     <mat-label>Exam duration</mat-label>
-                    <input matInput type="time" placeholder="Exam duration">
+                    <input matInput placeholder="Exam duration" [matTimepicker]="durationTimePicker">
+                    <mat-timepicker-toggle matIconSuffix [for]="durationTimePicker"/>
+                    <mat-timepicker #durationTimePicker/>
                 </mat-form-field>
+                <mat-checkbox class="exam-basic-informations-form-field" [checked]="pointDeduction"
+                              (change)="pointDeduction = !pointDeduction">
+                  Point deduction after wrong answer(percentage)
+                </mat-checkbox>
+                @if(pointDeduction) {
+                  <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                    <mat-label>Point deduction (percentage)</mat-label>
+                    <input matInput type="number" placeholder="Point deduction" aria-label="Subject" min="0" max="100">
+                  </mat-form-field>
+                }
                 <button class="exam-basic-informations-form-submit-button" mat-flat-button color="primary" type="submit">
                     Next
                 </button>
@@ -34,30 +57,36 @@
         </div>
     </mat-step>
     <mat-step label="Exam questions">
-        <mat-expansion-panel hideToggle>
+        <mat-expansion-panel class="question-add-panel" hideToggle>
             <mat-expansion-panel-header>
                 <mat-icon class="add-question-icon">quiz</mat-icon>
                 <div class="gapper"></div>
                 <div class="add-question-title">Add a new question</div>
             </mat-expansion-panel-header>
-            <form class="add-question-form">
-                <mat-form-field class="add-question-form-field" appearance="outline">
-                    <mat-label>Exam type</mat-label>
-                    <mat-select>
-                        @for (examType of getExamTypes(); track examType) {
-                            <mat-option [value]="examType">{{examType}}</mat-option>
-                        }
-                    </mat-select>
+            <div class="add-question">
+              <form class="add-question-form" (ngSubmit)="addNewQuestion()">
+                <mat-form-field class="add-question-form-field" appearance="outline" style="margin-bottom: -1.25em">
+                  <mat-label>Exam type</mat-label>
+                  <mat-select name="typeSelect" [(ngModel)]="selectedType">
+                    @for (examType of getExamTypes(); track examType) {
+                      <mat-option [value]="examType">{{examType}}</mat-option>
+                    }
+                  </mat-select>
                 </mat-form-field>
-                <button class="add-question-form-submit-button">
-                    <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
+                <button mat-icon-button class="add-question-form-submit-button">
+                  <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
                 </button>
-            </form>
+                <button (click)="checkQuestions()">
+                  <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
+                </button>
+              </form>
+            </div>
         </mat-expansion-panel>
         <div class="gapper"></div>
         <div class="questions-container">
-            <app-multiple-choice></app-multiple-choice>
-            <app-yes-no></app-yes-no>
+          @for (question of questions; let i = $index; track question) {
+            <app-question class="question-holder" [question]="question" [questionNumber]="i+1"></app-question>
+          }
         </div>
     </mat-step>
     <mat-step label="Done">

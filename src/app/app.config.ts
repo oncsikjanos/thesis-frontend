@@ -8,8 +8,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { VideochatComponent } from './components/videochat/videochat.component';
 import { AdministrationComponent } from './components/administration/administration.component';
 import { NewExamComponent } from './components/new-exam/new-exam.component';
-import {MultipleChoiceComponent} from './components/new-exam/multiple-choice/multiple-choice.component';
-import {YesNoComponent} from './components/new-exam/yes-no/yes-no.component';
+import {QuestionComponent} from './components/new-exam/question/question.component';
 
 export const routes: Routes = [
   {path: 'auth', component: AuthComponent, canActivate: [LoginGuard]},
@@ -20,8 +19,7 @@ export const routes: Routes = [
       {path: 'videochat', component: VideochatComponent}
     ]
   },
-  {path: 'multiple', component: MultipleChoiceComponent},
-  {path: 'yesno', component: YesNoComponent},
+  {path: 'question', component: QuestionComponent},
 ];
 
 export const appConfig: ApplicationConfig = {
