@@ -1,0 +1,42 @@
+<div class="profile-container">
+  <form class="profile-form"  [formGroup]="updateForm" enctype="multipart/form-data" (submit)="updateUser()">
+    <div class="picture-bday-role-email-container">
+      <div class="profile-picture">
+        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" [value]="selectedPicture?.name" hidden>
+        <img class="pfp-img" [ngSrc]="pfp" width="200" height="200" priority alt="profile picture">
+        @if(!selectedPicture){
+          <button mat-flat-button type="button" (click)="fileInput.click()">Add picture</button>
+        }@else{
+          <button mat-flat-button type="button" class="delete-picture" (click)="onFileDelete()">Delete picture</button>
+        }
+      </div>
+      <div class="role-email-bday">
+        <mat-form-field class="upper-form-field" appearance="outline">
+          <mat-label>Birthday</mat-label>
+          <input matInput type="date" disabled [valueAsDate]="userBeforeModify?.dateOfBirth">
+        </mat-form-field>
+        <mat-form-field class="upper-form-field" appearance="outline">
+          <mat-label>Role</mat-label>
+          <input matInput type="text" disabled [value]="userBeforeModify?.role">
+        </mat-form-field>
+        <mat-form-field class="upper-form-field" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" disabled [value]="userBeforeModify?.email">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="name-description-container">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" type="text" [value]="userBeforeModify?.name" >
+      </mat-form-field>
+      <mat-form-field class="form-field-textarea" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea class="option-text" matInput  formControlName="description" type="text" [value]="userBeforeModify?.description"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="button-container">
+      <button mat-flat-button class="save-button" type="submit">Save</button>
+    </div>
+  </form>
+</div>

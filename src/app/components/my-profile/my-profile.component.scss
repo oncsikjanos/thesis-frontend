@@ -1,0 +1,69 @@
+.profile-picture{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+.pfp-img{
+  border-radius: 10px;
+}
+
+.profile-form{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.profile-container{
+  padding: 80px;
+  width: 100%;
+  min-height: 100%;
+  justify-content: center;
+}
+
+.picture-bday-role-email-container{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.role-email-bday{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 100%;
+  min-height: 100%;
+}
+
+.name-description-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.upper-form-field{
+  margin-bottom: -1.25em
+}
+
+.save-button{
+  width: 80%;
+}
+.button-container{
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.option-text{
+  resize: none;
+}
+
+.delete-picture{
+  background-color: red;
+}
