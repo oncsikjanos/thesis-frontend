@@ -1,5 +1,5 @@
 <div class="navigation-bar">
-  <button class="nav-element user-name">
+  <button class="nav-element user-name" routerLink="/myprofile" routerLinkActive="active">
     <mat-icon class="nav-element-icon">person</mat-icon>
     <div class="nav-element-text">{{authService.currentUserSignal()?.name}}</div>
   </button>
@@ -20,7 +20,7 @@
       <mat-icon class="nav-element-icon">calendar_month</mat-icon>
       <div class="nav-element-text">Calendar</div>
     </button>
-    @if (authService.currentUserSignal()?.role === "Student"){
+    @if (authService.currentUserSignal()?.role === "admin"){
       <button class="nav-element" routerLink="/newexam" routerLinkActive="active">
         <mat-icon class="nav-element-icon">add</mat-icon>
         <div class="nav-element-text">New exam</div>

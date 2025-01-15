@@ -8,7 +8,8 @@
                            placeholder="Pick one"
                            aria-label="Subject"
                            matInput
-                           [matAutocomplete]="auto">
+                           [matAutocomplete]="auto"
+                           formControlName="subject">
                     <mat-autocomplete #auto="matAutocomplete">
                       @for(subject of getSubjects(); track subject) {
                         <mat-option [value]="subject">{{subject}}</mat-option>
@@ -16,27 +17,27 @@
                     </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
-                    <mat-label>Exam  date:</mat-label>
-                    <input matInput placeholder="Exam start date" [matDatepicker]="datePicker">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-label>Exam date:</mat-label>
+                    <input matInput placeholder="Exam date" [matDatepicker]="datePicker" formControlName="examDate">
+                    <mat-hint>YYYY.MM.DD.</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
               <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                 <mat-label>Exam startable from:</mat-label>
-                <input matInput placeholder="Exam startable from" [matTimepicker]="startTimePicker">
+                <input matInput placeholder="Exam startable from" [matTimepicker]="startTimePicker" formControlName="examStartTime">
                 <mat-timepicker-toggle matIconSuffix [for]="startTimePicker"/>
                 <mat-timepicker #startTimePicker/>
               </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                     <mat-label>Exam startable till</mat-label>
-                    <input matInput placeholder="Exam startable till" [matTimepicker]="tillTimePicker">
+                    <input matInput placeholder="Exam startable till" [matTimepicker]="tillTimePicker" formControlName="examEndTime">
                     <mat-timepicker-toggle matIconSuffix [for]="tillTimePicker"/>
                     <mat-timepicker #tillTimePicker/>
                 </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                     <mat-label>Exam duration</mat-label>
-                    <input matInput placeholder="Exam duration" [matTimepicker]="durationTimePicker">
+                    <input matInput placeholder="Exam duration" [matTimepicker]="durationTimePicker" formControlName="examDuration">
                     <mat-timepicker-toggle matIconSuffix [for]="durationTimePicker"/>
                     <mat-timepicker #durationTimePicker/>
                 </mat-form-field>
@@ -47,7 +48,7 @@
                 @if(pointDeduction) {
                   <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                     <mat-label>Point deduction (percentage)</mat-label>
-                    <input matInput type="number" placeholder="Point deduction" aria-label="Subject" min="0" max="100">
+                    <input matInput type="number" placeholder="Point deduction" aria-label="Subject" min="0" max="100" formControlName="pointDeduction">
                   </mat-form-field>
                 }
                 <button class="exam-basic-informations-form-submit-button" mat-flat-button color="primary" type="submit">
@@ -85,11 +86,13 @@
         <div class="gapper"></div>
         <div class="questions-container">
           @for (question of questions; let i = $index; track question) {
-            <app-question class="question-holder" [question]="question" [questionNumber]="i+1"></app-question>
+            <app-question class="question-holder" [question]="question" [questionNumber]="i+1" (deleteAnswer)="deleteQuestion($event)"></app-question>
           }
         </div>
     </mat-step>
     <mat-step label="Done">
-
+      <button class="exam-basic-informations-form-submit-button" mat-flat-button color="primary" (click)="sendTest()">
+        Confirm
+      </button>
     </mat-step>
 </mat-stepper>

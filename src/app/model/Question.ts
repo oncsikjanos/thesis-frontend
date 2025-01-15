@@ -4,5 +4,5 @@ export interface Question {
   options : any[],
   points: number,
   goodOption: string | null,
-  picture: File | null,
+  picture: FormData | null,
 }

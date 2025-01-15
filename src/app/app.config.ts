@@ -9,6 +9,7 @@ import { VideochatComponent } from './components/videochat/videochat.component';
 import { AdministrationComponent } from './components/administration/administration.component';
 import { NewExamComponent } from './components/new-exam/new-exam.component';
 import {QuestionComponent} from './components/new-exam/question/question.component';
+import {MyProfileComponent} from './components/my-profile/my-profile.component';
 
 export const routes: Routes = [
   {path: 'auth', component: AuthComponent, canActivate: [LoginGuard]},
@@ -16,7 +17,8 @@ export const routes: Routes = [
     children: [
       {path: 'admin', component: AdministrationComponent},
       {path: 'newexam', component: NewExamComponent},
-      {path: 'videochat', component: VideochatComponent}
+      {path: 'videochat', component: VideochatComponent},
+      {path: 'myprofile', component: MyProfileComponent}
     ]
   },
   {path: 'question', component: QuestionComponent},

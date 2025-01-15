@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +32,7 @@ export class QuestionComponent {
   @ViewChild('fileInput') fileInput!: HTMLInputElement;
   @Input() questionNumber: number = 1;
   @Input() question: Question | null = null;
+  @Output() deleteAnswer = new EventEmitter();
 
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
@@ -62,17 +63,14 @@ export class QuestionComponent {
     }
   }
 
-  checkOptions() {
-    this.check();
-  }
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       if (file.type.startsWith('image/')) {
         this.selectedFile = file;
-        this.question!.picture = this.selectedFile;
+        this.question!.picture = new FormData();
+        this.question!.picture.append('image',this.selectedFile);
         // Create a FileReader to read the image file
         const reader = new FileReader();
         reader.onload = () => {
@@ -101,14 +99,8 @@ export class QuestionComponent {
     console.log("questionTitle: ",this.questionTitle);
   }
 
-  check(){
-    /*if(this.question?.type === "multiple choice"){
-      this.question!.goodOption = this.options[this.goodAnswerIndex];
-    }
-    else if(this.question?.type === "yes or no"){
-      this.question!.goodOption = null;
-    }*/
-
-    console.log(this.question);
+  onDelete() {
+    this.deleteAnswer.emit(this.questionNumber);
   }
+
 }

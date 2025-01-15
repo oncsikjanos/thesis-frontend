@@ -15,6 +15,9 @@ import {MAT_TIMEPICKER_CONFIG, MatTimepickerModule} from '@angular/material/time
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule, MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 import { MatCheckboxModule} from '@angular/material/checkbox';
+import {Test} from '../../model/Test';
+import {DatabaseService} from '../../services/database.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-new-exam',
@@ -45,6 +48,20 @@ import { MatCheckboxModule} from '@angular/material/checkbox';
 })
 export class NewExamComponent {
   formBuilder = inject(FormBuilder);
+  databaseService = inject(DatabaseService);
+  authService = inject(AuthService);
+
+  newTest: Test = {
+    subject: '',
+    startableFrom: new Date(),
+    startableTill: new Date(),
+    poinDeduction: null,
+    duration: 0,
+    videocall: false,
+    questions: [],
+    students: [],
+    teachers: []
+  }
 
   newExamForm: FormGroup;
   pointDeduction: boolean = false;
@@ -56,12 +73,12 @@ export class NewExamComponent {
 
   constructor() {
     this.newExamForm = this.formBuilder.group({
-      examType: ['', Validators.required],
       subject: ['', Validators.required],
-      examName: ['', Validators.required],
-      examStartDate: ['', Validators.required],
+      examDate: ['', Validators.required],
       examStartTime: ['', Validators.required],
+      examEndTime: ['', Validators.required],
       examDuration: ['', Validators.required],
+      pointDeduction: ['', Validators.required],
     });
   }
 
@@ -75,7 +92,23 @@ export class NewExamComponent {
   }
 
   onNext() {
-    console.log(this.newExamForm.value);
+    const from: Date = this.newExamForm.controls['examStartTime'].value
+    const till: Date = this.newExamForm.controls['examEndTime'].value;
+
+    this.newTest.subject = this.newExamForm.controls['subject'].value;
+    this.newTest.startableFrom = new Date(this.newExamForm.controls['examDate'].value);
+    this.newTest.startableTill = new Date(this.newExamForm.controls['examDate'].value);
+    this.newTest.startableFrom.setHours(from.getHours(), from.getMinutes());
+    this.newTest.startableTill.setHours(till.getHours(), till.getMinutes());
+    this.newTest.duration = this.dateToMinuteConvert(this.newExamForm.controls['examDuration'].value);
+    this.newTest.poinDeduction = this.newExamForm.controls['pointDeduction'].value;
+
+    console.log("form: ",this.newExamForm.value);
+    console.log("test: ",this.newTest);
+  }
+
+  dateToMinuteConvert(date: Date) {
+    return (date.getHours() + 1) * 24 + date.getMinutes() + 1;
   }
 
   addNewQuestion(){
@@ -95,4 +128,16 @@ export class NewExamComponent {
     console.log(this.questions);
   }
 
+  deleteQuestion(index: number){
+    console.log(index)
+    this.questions.splice(index-1, 1);
+  }
+
+  sendTest(){
+    this.onNext();
+    this.newTest.questions = this.questions;
+    this.newTest.teachers.push(this.authService.currentUserSignal()!.email);
+    console.log(this.newTest);
+    this.databaseService.addTest(this.newTest).subscribe();
+  }
 }

@@ -13,7 +13,6 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   dbService = inject(DatabaseService);
   authService = inject(AuthService);
-  databaseService = inject(DatabaseService);
   router = inject(Router);
 
   ngOnInit(){
@@ -24,7 +23,9 @@ export class AppComponent {
             email: stateMessage.body.user.email,
             name: stateMessage.body.user.name,
             dateOfBirth: stateMessage.body.user.dateOfBirth,
-            role: stateMessage.body.user.role
+            role: stateMessage.body.user.role,
+            pfp: stateMessage.body.user.pfp,
+            description: stateMessage.body.user.description,
           });
           //this.router.navigate(['/']);
         }
