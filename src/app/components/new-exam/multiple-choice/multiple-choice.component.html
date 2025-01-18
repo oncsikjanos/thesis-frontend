@@ -1,8 +1,8 @@
 <mat-radio-group class="question-options" [(ngModel)]="goodAnswerIndex" (ngModelChange)="onGoodAnswerChange()">
-  @for (option of options; let i = $index; track i) {
+  @for (option of this.question!.options; let i = $index; track i) {
     <div class="question-option" >
       <mat-radio-button [value]="i"></mat-radio-button>
-      <textarea class="option-text" matInput type="text" [(ngModel)]="options[i]"></textarea>
+      <textarea class="option-text" matInput type="text" [(ngModel)]="this.question!.options[i]" (ngModelChange)="onValueChange()"></textarea>
       <button mat-icon-button class="remove-button"  color="transparent" (click)="removeOption(i)" >
         <mat-icon >remove</mat-icon>
       </button>

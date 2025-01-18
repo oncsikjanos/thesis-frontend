@@ -1,0 +1,29 @@
+.management-container{
+  padding: 50px;
+}
+.in-progress-card{
+  width: 100%;
+}
+
+.exam-in-progress-list{
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  gap: 30px;
+}
+
+.in-progress-card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+
+.create-new-exam{
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 auto auto;
+  justify-content: right;
+}

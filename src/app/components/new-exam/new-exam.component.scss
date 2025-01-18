@@ -4,6 +4,19 @@
     margin: 10px;
 }
 
+.sticky-header{
+  position: sticky;
+  top: 0;
+  z-index: 9;
+}
+
+.mat-horizontal-stepper-header-container {
+  position: sticky;
+  top: 0; /* Sticks it to the top of the viewport */
+  z-index: 1000; /* Ensure it's on top of other content */
+  background-color: white; /* Prevents content from overlapping */
+}
+
 .exam-basic-informations-form {
     display: flex;
     flex-direction: column;

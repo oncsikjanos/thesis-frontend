@@ -1,13 +1,16 @@
 import { Question } from "./Question";
 
 export interface Test {
+  _id : string;
   subject: string,
+  status: "creation" | "finished" | "filling" | "filled",
   startableFrom: Date,
   startableTill: Date,
   duration: number,
   poinDeduction: number | null,
   videocall : boolean,
-  questions: Question[],
+  questions: string[],
   students: string[],
-  teachers: string[]
+  teacher: string,
+  limit: number,
 }

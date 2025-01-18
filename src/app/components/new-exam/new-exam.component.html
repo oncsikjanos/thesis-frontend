@@ -1,4 +1,4 @@
-<mat-stepper class="new-exam-stepper">
+<mat-stepper class="new-exam-stepper" color="primary">
     <mat-step label="Exam basic informations">
         <div class="exam-basic-informations-container">
             <form class="exam-basic-informations-form" [formGroup]="newExamForm" (ngSubmit)="onNext()">
@@ -16,6 +16,10 @@
                       }
                     </mat-autocomplete>
                 </mat-form-field>
+              <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
+                <mat-label>Exam user limit</mat-label>
+                <input matInput type="number" placeholder="Limit" aria-label="Subject" min="20" max="1000" formControlName="limit">
+              </mat-form-field>
                 <mat-form-field class="exam-basic-informations-form-field" appearance="outline">
                     <mat-label>Exam date:</mat-label>
                     <input matInput placeholder="Exam date" [matDatepicker]="datePicker" formControlName="examDate">
@@ -41,7 +45,10 @@
                     <mat-timepicker-toggle matIconSuffix [for]="durationTimePicker"/>
                     <mat-timepicker #durationTimePicker/>
                 </mat-form-field>
-                <mat-checkbox class="exam-basic-informations-form-field" [checked]="pointDeduction"
+                <mat-checkbox class="exam-basic-informations-form-field" formControlName="videocall">
+                  Make the exam to be a videocall!
+                </mat-checkbox>
+                <mat-checkbox class="exam-basic-informations-form-field"  [checked]="pointDeduction"
                               (change)="pointDeduction = !pointDeduction">
                   Point deduction after wrong answer(percentage)
                 </mat-checkbox>
@@ -74,10 +81,7 @@
                     }
                   </mat-select>
                 </mat-form-field>
-                <button mat-icon-button class="add-question-form-submit-button">
-                  <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
-                </button>
-                <button (click)="checkQuestions()">
+                <button mat-icon-button type="submit" class="add-question-form-submit-button">
                   <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
                 </button>
               </form>
@@ -85,9 +89,9 @@
         </mat-expansion-panel>
         <div class="gapper"></div>
         <div class="questions-container">
-          @for (question of questions; let i = $index; track question) {
-            <app-question class="question-holder" [question]="question" [questionNumber]="i+1" (deleteAnswer)="deleteQuestion($event)"></app-question>
-          }
+            @for (questionId of questions; let i = $index; track questionId) {
+              <app-question class="question-holder" [questionId]="questionId" [questionNumber]="i+1" (deleteAnswer)="deleteQuestion($event)"></app-question>
+            }
         </div>
     </mat-step>
     <mat-step label="Done">

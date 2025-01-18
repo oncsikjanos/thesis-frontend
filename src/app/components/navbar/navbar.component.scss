@@ -32,6 +32,13 @@
 
 }
 
+.nav-upper-items{
+  display: flex;
+  flex-direction: row;
+  padding: 12px 24px;
+  justify-content: space-between;
+}
+
 .nav-element-icon {
   margin-right: 10px;
 }
@@ -57,4 +64,40 @@
 
   mat-icon {
     color: #1dbf73;
+  }
+
+  .profile-picture{
+    border-radius: 100%;
+  }
+
+  .user-mini-profile{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 80%;
+  }
+  .profile-picture{
+    display: flex;
+    justify-content: center;
+  }
+
+  .settings-notification-holder{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .mini-profile-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    margin-left: 5px;
+    font-weight: bold;
+  }
+
+  .notification-overlay{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
   }

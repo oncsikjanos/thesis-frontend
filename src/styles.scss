@@ -50,4 +50,13 @@ html {
     filled-container-color: white,
     //supporting-text-color: black,
   ));
+
+  @include mat.menu-overrides((
+    container-color: white,
+    item-spacing:0
+  ));
+
+  @include mat.table-overrides((
+    background-color: white,
+  ));
 }

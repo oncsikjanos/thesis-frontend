@@ -1,54 +1,56 @@
-<mat-card class="question-container">
-  <mat-card-header matPrefix class="question-header">
-    <div class="question-title-container">
-      <div class="question-number">{{questionNumber}}.</div>
-      <textarea class="option-text" matInput type="text" [(ngModel)]="question!.question" (ngModelChange)="onTitleChange($event)"></textarea>
-      <div class="question-point">
-        <div class="question-point-text">Points: </div>
-        <input class="option-text" type="number" [defaultValue]="minPoints" [min]="minPoints" [max]="maxPoints" [(ngModel)]="question!.points" (blur)="onPointChange($event)">
+@if(question){
+  <mat-card class="question-container">
+    <mat-card-header matPrefix class="question-header">
+      <div class="question-title-container">
+        <div class="question-number">{{questionNumber}}.</div>
+        <textarea class="option-text" matInput type="text" [(ngModel)]="question!.question" (ngModelChange)="onTitleChange($event)"></textarea>
+        <div class="question-point">
+          <div class="question-point-text">Points: </div>
+          <input class="option-text" type="number" [defaultValue]="minPoints" [min]="minPoints" [max]="maxPoints" [(ngModel)]="question!.points" (blur)="onPointChange($event)">
+        </div>
       </div>
-    </div>
-    @if(selectedFile){
-      <div class="question-image-container">
-        <img class="question-image" [src]="imagePreview" alt="Question image">
-      </div>
-    }
-  </mat-card-header>
-  <mat-card-content class="question-content">
-    @if(this.question!.type === 'multiple choice'){
-      <app-multiple-choice [options]="question!.options" (goodOptionChange)="question!.goodOption = $event"></app-multiple-choice>
-    } @else if (this.question!.type === 'yes or no'){
-      <app-yes-no [options]="question!.options" ></app-yes-no>
-    }
-  </mat-card-content>
-  <mat-card-actions class="question-button-holder">
-    <button mat-button class="question-button" (click)="addQuestion()">
-      <div class="button-text">
-        Add question
-      </div>
-      <mat-icon>add</mat-icon>
-    </button>
-    <div class="picture-button-container">
-      <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" [value]="selectedFile?.name" hidden>
-      <button mat-button class="picture-button" (click)="fileInput.click()">
+      @if(imagePreview){
+        <div class="question-image-container">
+          <img class="question-image" [src]="imagePreview" alt="Question image">
+        </div>
+      }
+    </mat-card-header>
+    <mat-card-content class="question-content">
+      @if(this.question!.type === 'multiple choice'){
+        <app-multiple-choice [question]="question"></app-multiple-choice>
+      } @else if (this.question!.type === 'yes or no'){
+        <app-yes-no [question]="question" ></app-yes-no>
+      }
+    </mat-card-content>
+    <mat-card-actions class="question-button-holder">
+      <button mat-button class="question-button" (click)="addQuestion()">
         <div class="button-text">
-          @if(!imagePreview){Add picture} @else{Change picture}
+          Add question
         </div>
         <mat-icon>add</mat-icon>
       </button>
-      @if(imagePreview){
-        <button mat-button class="delete-picture-button" (click)="onDeletePicture()">
+      <div class="picture-button-container">
+        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" [value]="selectedFile?.name" hidden>
+        <button mat-button class="picture-button" (click)="fileInput.click()">
           <div class="button-text">
-            Delete picture
+            @if(!imagePreview){Add picture} @else{Change picture}
           </div>
-          <mat-icon class="remove-button">remove</mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
-      }
-    </div>
-    <button mat-button class="delete-picture-button" (click)="onDelete()">
-      <div class="button-text">
-        Delete
+        @if(imagePreview){
+          <button mat-button class="delete-picture-button" (click)="onDeletePicture()">
+            <div class="button-text">
+              Delete picture
+            </div>
+            <mat-icon class="remove-button">remove</mat-icon>
+          </button>
+        }
       </div>
-      <mat-icon class="remove-button">remove</mat-icon></button>
-  </mat-card-actions>
-</mat-card>
+      <button mat-button class="delete-picture-button" (click)="onDelete()">
+        <div class="button-text">
+          Delete
+        </div>
+        <mat-icon class="remove-button">remove</mat-icon></button>
+    </mat-card-actions>
+  </mat-card>
+}

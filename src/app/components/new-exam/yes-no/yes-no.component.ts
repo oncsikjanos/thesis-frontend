@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {Question} from '../../../model/Question';
+import {DatabaseService} from '../../../services/database.service';
 
 @Component({
   selector: 'app-yes-no',
@@ -22,20 +24,33 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
   styleUrl: './yes-no.component.scss'
 })
 export class YesNoComponent {
-  @Input() options: { text: string; value: any }[] = [];
+  @Input() question: Question | null = null;
+
+  databaseService = inject(DatabaseService);
+
+  debounceTime: number = 1500;
+  private debounceTimer: any;
 
   addQuestion() {
-    this.options.push({
-      text: 'New Question ' + this.options.length,
+    this.question!.options.push({
+      text: 'New Question ' + this.question!.options.length,
       value: null
     });
+    this.onValueChange();
   }
 
   removeOption(index: number) {
-    this.options.splice(index, 1);
+    this.question!.options.splice(index, 1);
+    this.onValueChange();
   }
-  isChecked(i: number){
-    console.log('isChecked: ',this.options[i].value === null)
-    return this.options[i].value === null
+
+  onValueChange(){
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    this.debounceTimer = setTimeout(() => {
+      this.databaseService.updateQuestion(this.question!._id, this.question!).subscribe();
+    }, this.debounceTime);
   }
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MultipleChoiceComponent} from '../multiple-choice/multiple-choice.component';
 import {YesNoComponent} from '../yes-no/yes-no.component';
 import {Question} from '../../../model/Question';
+import {DatabaseService} from '../../../services/database.service';
 
 @Component({
   selector: 'app-question',
@@ -26,13 +27,20 @@ import {Question} from '../../../model/Question';
   templateUrl: './question.component.html',
   styleUrl: './question.component.scss'
 })
-export class QuestionComponent {
+export class QuestionComponent implements OnInit {
   @ViewChild(MultipleChoiceComponent) multipleChoiceComponent!: MultipleChoiceComponent;
   @ViewChild(YesNoComponent) yesNoComponent!: YesNoComponent;
   @ViewChild('fileInput') fileInput!: HTMLInputElement;
   @Input() questionNumber: number = 1;
-  @Input() question: Question | null = null;
+  @Input() questionId: string | null = null;
   @Output() deleteAnswer = new EventEmitter();
+
+  databaseService = inject(DatabaseService);
+
+  debounceTime: number = 1500;
+  private debounceTimer: any;
+
+  question: Question | null = null;
 
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
@@ -41,6 +49,18 @@ export class QuestionComponent {
   maxPoints: number = 25;
   minPoints: number = 1;
 
+  ngOnInit() {
+    this.databaseService.getQuestion(this.questionId!).subscribe({
+      next: data => {
+        this.question = data.body.question;
+        this.imagePreview = this.question!.picture;
+        console.log(this.imagePreview);
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
+  }
 
   addQuestion() {
     console.log("add question");
@@ -61,6 +81,7 @@ export class QuestionComponent {
     }else if(number>this.maxPoints){
       this.question!.points=this.maxPoints
     }
+    this.onValueChange();
   }
 
   onFileSelected(event: Event): void {
@@ -69,15 +90,23 @@ export class QuestionComponent {
       const file = input.files[0];
       if (file.type.startsWith('image/')) {
         this.selectedFile = file;
-        this.question!.picture = new FormData();
-        this.question!.picture.append('image',this.selectedFile);
         // Create a FileReader to read the image file
         const reader = new FileReader();
         reader.onload = () => {
           this.imagePreview = reader.result;// Save the image data for preview
         };
         reader.readAsDataURL(file); // Read the file as a Data URL
-
+        const formData = new FormData();
+        formData.append('picture', file);
+        formData.append('questionId', this.question!._id);
+        this.databaseService.addQuestionPicture(formData).subscribe({
+          next: data => {
+            console.log(data.body.picture);
+          },
+          error: err => {
+            console.error(err.body.error);
+          }
+        });
         console.log('Selected file:', this.selectedFile);
       } else {
         console.error();
@@ -88,19 +117,37 @@ export class QuestionComponent {
   onDeletePicture(){
     console.log("before delete input: ", this.fileInput.value);
     this.selectedFile = null;
-    this.question!.picture = null;
     this.imagePreview = null;
     this.fileInput.value = '';
+    this.databaseService.deleteQuestionPicture(this.question!._id).subscribe({
+      next: data => {
+        console.log(data.body.message);
+      },
+      error: err => {
+        console.error(err.body.error);
+      }
+    })
     console.log("after delete input: ", this.fileInput.value);
   }
 
   onTitleChange(newTitle: string){
     console.log("newTitle: ",newTitle);
     console.log("questionTitle: ",this.questionTitle);
+    this.onValueChange();
   }
 
   onDelete() {
     this.deleteAnswer.emit(this.questionNumber);
+  }
+
+  onValueChange(){
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    this.debounceTimer = setTimeout(() => {
+      this.databaseService.updateQuestion(this.question!._id, this.question!).subscribe();
+    }, this.debounceTime);
   }
 
 }

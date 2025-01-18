@@ -1,8 +1,38 @@
 <div class="navigation-bar">
-  <button class="nav-element user-name" routerLink="/myprofile" routerLinkActive="active">
-    <mat-icon class="nav-element-icon">person</mat-icon>
-    <div class="nav-element-text">{{authService.currentUserSignal()?.name}}</div>
-  </button>
+  <div class="nav-upper-items user-name">
+    <div class="user-mini-profile">
+      <img class="profile-picture" [ngSrc]="pfp" width="40" height="40" alt="mini profile picture">
+      <div class="mini-profile-text">{{this.authService.currentUserSignal()?.name}}</div>
+    </div>
+    <div class="settings-notification-holder">
+      <button mat-icon-button cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen">
+        <mat-icon class="nav-element-icon">notifications</mat-icon>
+      </button>
+      <!-- This template displays the overlay content and is connected to the button -->
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="isOpen"
+        (detach)="isOpen = false">
+        <div class="notification-overlay">
+          <div class="send-date">
+            2015.01.15 20:43
+          </div>
+          <div class="text-close">
+            <div class="notification-text">
+              Some random text kekw pls help
+            </div>
+            <button class="delete-notification">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <button mat-icon-button type="button" routerLink="/myprofile" routerLinkActive="active">
+        <mat-icon class="nav-element-icon">settings</mat-icon>
+      </button>
+    </div>
+  </div>
   <div class="nav-content">
     <button class="nav-element">
       <mat-icon class="nav-element-icon">library_books</mat-icon>

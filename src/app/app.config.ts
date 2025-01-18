@@ -10,15 +10,17 @@ import { AdministrationComponent } from './components/administration/administrat
 import { NewExamComponent } from './components/new-exam/new-exam.component';
 import {QuestionComponent} from './components/new-exam/question/question.component';
 import {MyProfileComponent} from './components/my-profile/my-profile.component';
+import {ExamManagementComponent} from './components/exam-management/exam-management.component';
 
 export const routes: Routes = [
   {path: 'auth', component: AuthComponent, canActivate: [LoginGuard]},
   {path: '', component: HomePageComponent, canActivate: [AuthGuard],
     children: [
       {path: 'admin', component: AdministrationComponent},
-      {path: 'newexam', component: NewExamComponent},
+      {path: 'newexam', component: ExamManagementComponent},
       {path: 'videochat', component: VideochatComponent},
-      {path: 'myprofile', component: MyProfileComponent}
+      {path: 'myprofile', component: MyProfileComponent},
+      {path: 'newexam/:id', component: NewExamComponent},
     ]
   },
   {path: 'question', component: QuestionComponent},

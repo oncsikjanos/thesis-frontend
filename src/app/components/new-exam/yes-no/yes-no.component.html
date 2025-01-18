@@ -1,13 +1,14 @@
 <div class="question-options">
-   @for (option of options; let i = $index; track i) {
+   @for (option of this.question!.options; let i = $index; track i) {
           <div class="question-option" >
             <div class="button-toggle-group">
               <mat-button-toggle-group
                                        name="optionValue"
                                        aria-label="Option Value"
                                        hideSingleSelectionIndicator="true"
-                                       [(ngModel)]="options[i].value"
-                                       [value]="options[i].value">
+                                       [(ngModel)]="this.question!.options[i].value"
+                                       [value]="this.question!.options[i].value"
+                                       (ngModelChange)="onValueChange()">
                 <mat-button-toggle [value]="true">
                   <mat-icon>check</mat-icon>
                 </mat-button-toggle>
@@ -19,7 +20,7 @@
                 </mat-button-toggle>
               </mat-button-toggle-group>
             </div>
-            <textarea class="option-text" matInput type="text" [(ngModel)]="options[i].text"></textarea>
+            <textarea class="option-text" matInput type="text" [(ngModel)]="this.question!.options[i].text" (ngModelChange)="onValueChange()"></textarea>
             <button mat-icon-button class="remove-button"  color="transparent" (click)="removeOption(i)" >
               <mat-icon >remove</mat-icon>
             </button>
