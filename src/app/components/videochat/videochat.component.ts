@@ -60,10 +60,10 @@ export class VideochatComponent implements OnInit, OnDestroy {
 
     navigator.mediaDevices.getUserMedia({video: true, audio: true}).then( stream => {
       this.localStream = stream;
+      this.webrtcService.localStream = stream;
       console.log('LocalStream: ', stream);
       this.webrtcService.joinRoom(this.room, this.authService.currentUserSignal()!.name);
       /*stream.getTracks().forEach( track => {
-        this.webrtcService.localStream = stream;
         this.webrtcService.localTrack = track;
         this.webrtcService.peerConnection.addTrack(track, stream);
       })*/
