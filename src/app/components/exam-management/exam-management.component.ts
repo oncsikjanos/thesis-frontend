@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {DatabaseService} from '../../services/database.service';
 import {ShowExamComponent} from './show-exam/show-exam.component';
 import {MatCardModule} from '@angular/material/card';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-exam-management',
@@ -18,6 +19,7 @@ import {MatCardModule} from '@angular/material/card';
 })
 export class ExamManagementComponent implements OnInit {
   databaseService = inject(DatabaseService)
+  router = inject(Router);
 
   maxExamNumber: number = 5;
   myTestsInProgress = []
@@ -26,6 +28,17 @@ export class ExamManagementComponent implements OnInit {
     this.databaseService.getTestsInProgress().subscribe({
       next: data => {
         this.myTestsInProgress = data.body.tests;
+      }
+    })
+  }
+
+  createNewTest(): void {
+    this.databaseService.createTest().subscribe({
+      next: data => {
+        this.router.navigate(['/newexam', data.body.id]);
+      },
+      error: error => {
+        console.log(error);
       }
     })
   }

@@ -1,0 +1,42 @@
+<div class="search-bar">
+  <div class="search-text">Search</div>
+  <form class="search-form">
+    <div class="field-container">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Subject</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Subject"
+               matInput
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          @for(subject of getSubjects(); track subject) {
+            <mat-option [value]="subject">{{subject}}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <button mat-icon-button class="delete-button" type="button">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="field-container">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Exam date:</mat-label>
+        <input matInput placeholder="Exam date" [matDatepicker]="datePicker">
+        <mat-hint>YYYY.MM.DD.</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+      <button mat-icon-button class="delete-button" type="button">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <button mat-flat-button type="submit">Search</button>
+  </form>
+</div>
+<div class="exam-table">
+  @if(takeAbleExams){
+    <app-show-exam [tests]="takeAbleExams"></app-show-exam>
+  }
+
+</div>

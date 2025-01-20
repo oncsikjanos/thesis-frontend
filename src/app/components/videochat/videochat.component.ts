@@ -1,86 +1,114 @@
-import { Component, inject, ViewChild, ElementRef} from '@angular/core';
+import {
+  Component,
+  inject,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  ChangeDetectorRef, OnDestroy
+} from '@angular/core';
 import { WebrtcService } from '../../services/webrtc.service';
 import { FormsModule } from '@angular/forms';
-import { SignalingService } from '../../services/signaling.service';
+import { MatButtonModule } from '@angular/material/button';
+import {AuthService} from '../../services/auth.service';
+import {ActivatedRoute} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import {ShowVideoComponent} from './show-video/show-video.component';
 
 @Component({
   selector: 'app-videochat',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatButtonModule,
+    CommonModule,
+    ShowVideoComponent,
+  ],
   templateUrl: './videochat.component.html',
   styleUrl: './videochat.component.scss'
 })
-export class VideochatComponent {
+export class VideochatComponent implements OnInit, OnDestroy {
   @ViewChild('localVideo') localVideo: ElementRef | null = null;
   @ViewChild('remoteVideo') remoteVideo: ElementRef | null = null;
 
+  remoteUserName: string| null = null;
+  remoteSocket: string| null = null;
 
-  localID1: string = 'user1';
-  localID2: string = 'user2';
+  activatedRoute= inject(ActivatedRoute);
+  cdr = inject(ChangeDetectorRef);
 
-  remoteID: string = '';
+  authService = inject(AuthService);
+  room: any;
 
-  roomID: string = 'USDFWAE';
+  alreadyConnected = false;
 
   connectedCameras: MediaDeviceInfo[] = [];
   connectedMicrophones: MediaDeviceInfo[] = [];
 
-  selectedCamera: string  = '';
-  selectedMicrophone: string  = '';
-
-  private localStream: MediaStream | null = null;
-  private remoteStream: MediaStream | null = null;
+  localStream: MediaStream | null = null;
 
   isMuted: boolean = true;
   isCameraOn: boolean = false;
 
-  private webrtcService: WebrtcService = inject(WebrtcService);
-  private signalingService: SignalingService = inject(SignalingService);
+  message: string | null = null;
+
+  webrtcService: WebrtcService = inject(WebrtcService);
 
   constructor() {}
 
 
   ngOnInit() {
-    /*this.webrtcService.getConnectedDevices((cameras, microphones) => {
-      this.connectedCameras = cameras;
-      this.connectedMicrophones = microphones;
-      console.log("videoinputs:", this.connectedCameras);
-      console.log("audioinputs:", this.connectedMicrophones);
-    });*/
+    this.room = this.activatedRoute.snapshot.paramMap.get('id');
 
     navigator.mediaDevices.getUserMedia({video: true, audio: true}).then( stream => {
       this.localStream = stream;
-      stream.getTracks().forEach( track => {
+      console.log('LocalStream: ', stream);
+      this.webrtcService.joinRoom(this.room, this.authService.currentUserSignal()!.name);
+      /*stream.getTracks().forEach( track => {
+        this.webrtcService.localStream = stream;
+        this.webrtcService.localTrack = track;
         this.webrtcService.peerConnection.addTrack(track, stream);
-      })
+      })*/
       if(this.localVideo){
         this.localVideo.nativeElement.srcObject = stream;
       }
     });
 
-    // Listen if we get connected to our peer
-    this.webrtcService.peerConnection.addEventListener('connectionstatechange', event => {
-      if (this.webrtcService.peerConnection.connectionState === 'connected') {
-        console.log("connected to the other peer");
-      }
+    this.webrtcService.userDisconnected$.subscribe((disconnectedSocketId) => {
+      // You can also remove their video stream or update the UI as needed
+      this.handleUserDisconnection(disconnectedSocketId);
     });
 
-    // Listenin to peer track changes
-    this.webrtcService.peerConnection.addEventListener('track', async (event) => {
-      const [remoteStream] = event.streams;
-      if(this.remoteVideo){
-        this.remoteVideo.nativeElement.srcObject = remoteStream;
-      }
-    });
+    this.webrtcService.userConnected$.subscribe((state) => {
+      this.alreadyConnected = state;
+    })
+  }
+
+  ngOnDestroy() {
+    this.webrtcService.destroyPeerConnections();
+    this.stopCamera();
+    this.localStream = null;
+  }
+
+  handleUserDisconnection(socketId: string): void {
+    // Logic to remove user's video or update UI
+    console.log(`Handling disconnection for user: ${socketId}`);
+    if(this.remoteSocket === socketId){
+      this.remoteSocket = null;
+      this.remoteUserName = null;
+    }
+
+    if(this.remoteVideo){
+      this.remoteVideo.nativeElement.srcObject = null;
+    }
   }
 
   startCamera() {
-    this.webrtcService.openCamera(this.connectedCameras[0].deviceId, 600, 400, (stream) => {
+    this.webrtcService.openCamera(this.connectedCameras[0].deviceId, 1920, 1080, (stream) => {
       this.localStream = stream;
       console.log("stream:", stream);
       if(this.localVideo){
         this.localStream.getTracks().forEach(track => {
           if(this.localStream){
-            this.webrtcService.peerConnection.addTrack(track, this.localStream);
+            //this.webrtcService.peerConnection.addTrack(track, this.localStream);
           }
           console.log(track.getSettings());
         })
@@ -107,19 +135,42 @@ export class VideochatComponent {
     }
   }
 
-  changeCamera(cameraId: any) {
-    console.log("cameraId:", cameraId.target.value);
+  makeMainStream(idStreamArray: any) {
+    if(this.remoteVideo){
+      this.remoteVideo.nativeElement.srcObject = idStreamArray[1];
+    }
+    this.remoteUserName = this.webrtcService.userNames.get(idStreamArray[0]) ?? '' ;
+    this.remoteSocket = idStreamArray[0];
+
   }
 
-  changeMicrophone(microphoneId: any) {
-    console.log("cameraId:", microphoneId.target.value);
-    //newMicrophone
-  }
-  async joinRoomUser(userID: string, otherUserID: string){
-    await this.webrtcService.joinRoom(this.roomID, userID, otherUserID);
+  sendMessage() {
+    console.log(this.message);
+    if(this.message && this.message.length > 0) {
+      this.webrtcService.sendMessage(this.message, this.room, this.authService.currentUserSignal()!.name);
+    }
+
+    this.message = '';
   }
 
-  sendMessage(){
-    this.signalingService.emitMessage();
+  generateRandomColor(username: string): string {
+    // Hash the username to get a deterministic value
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // Generate a hex color based on the hash
+    let color = '#';
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xFF;
+      color += ('00' + value.toString(16)).slice(-2);
+    }
+
+    return color;
+  }
+
+  get remoteMedias() {
+    return Array.from(this.webrtcService.remoteStreams.entries());
   }
 }

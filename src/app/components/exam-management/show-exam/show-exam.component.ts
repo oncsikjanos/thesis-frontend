@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 
 import {Test} from '../../../model/Test';
 import {MatTableModule} from '@angular/material/table';
@@ -36,6 +36,18 @@ export class ShowExamComponent  implements OnInit {
   }
 
   onDeleteExam(id: string){
-
+    this.databaseService.deleteTest(id).subscribe({
+      next: data => {
+        console.log(data.body.message);
+        this.databaseService.getTestsInProgress().subscribe({
+          next: data => {
+            this.receivedTest = data.body.tests;
+          }
+        });
+      },
+      error: err => {
+        console.error(err.body.error);
+      }
+    })
   }
 }

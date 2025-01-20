@@ -18,6 +18,12 @@ const ADD_QUESTION_PICTURE = '/addQuestionPicture';
 const DELETE_QUESTION_PICTURE = '/deleteQuestionPicture';
 const UPDATE_QUESTION = '/updateQuestion';
 const DELETE_QUESTION = '/deleteQuestion';
+const GET_TAKEABLE_EXAMS = '/getAppliableTest';
+const GET_TEACHER = '/getTeacher';
+const CREATE_TEST = '/createInitialTest';
+const DELETE_TEST = '/deleteTest';
+const APPLY_TEST = '/applyToTest';
+const CANCEL_APPLY_TEST = '/cancelTestApplication';
 
 @Injectable({
   providedIn: 'root'
@@ -117,6 +123,48 @@ export class DatabaseService {
 
   deleteQuestion(questionId: string, testId: string): Observable<any> {
     return this.http.post(API+DELETE_QUESTION, {questionId: questionId, testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getTakeAbleExams(date?: Date, subject? : string): Observable<any> {
+    return this.http.post(API+GET_TAKEABLE_EXAMS, {date, subject}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getTeacher(email: string): Observable<any> {
+    return this.http.post(API+GET_TEACHER, {teacherEmail: email}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  applyExam(testId: string): Observable<any>{
+    return this.http.post(API+APPLY_TEST, {testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  cancelExam(testId: string): Observable<any>{
+    return this.http.post(API+CANCEL_APPLY_TEST, {testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  createTest(): Observable<any> {
+    return this.http.get(API+CREATE_TEST, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  deleteTest(testId: string): Observable<any> {
+    return this.http.post(API+DELETE_TEST, {testId: testId}, {
       headers: { 'Content-Type': 'application/json'},
       observe: 'response',
       withCredentials: true}).pipe();

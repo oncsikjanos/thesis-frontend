@@ -1,0 +1,35 @@
+.video-name{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 100;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.video-element{
+  border-radius: 10px;
+  height: 100%; /* 20% of the container height */
+  width: 100%;
+  background-color: yellow;
+}
+
+.video-stream{
+  position: relative;
+  border-radius: 10px;
+  height: 100%;
+  width: 200px;
+  overflow: hidden;
+}
+
+video {
+  width: 100%; /* Ensure videos take full width of their container */
+  height: 100%;
+  pointer-events: none;
+  object-fit: cover;
+  border-radius: 10px;
+  z-index:20;
+}

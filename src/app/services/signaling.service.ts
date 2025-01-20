@@ -24,21 +24,8 @@ export class SignalingService {
   }
 
   // Joining to our call room in socket
-  emitJoinRoom(roomID: string,userID: string) : Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.socket.emit('join-room', {userID: userID, roomID: roomID}, (callback: any) => {
-        if(callback.success){
-          console.log('Got back on room join: ', callback);
-          resolve(callback);
-        }
-        else {
-          reject({
-            success: false,
-            message: "Join unsuccesfull",
-          });
-        }
-      });
-    });
+  emitJoinRoom(room: string,name: string) {
+      return this.socket.emit('join-room', {room, name});
   }
 
   // Sending offer to the other client
@@ -148,5 +135,9 @@ export class SignalingService {
     this.socket.on('test', (data: any) => {
       console.log('message got: ', data);
     });
+  }
+
+  onUserJoined(){
+
   }
 }

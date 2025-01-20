@@ -1,0 +1,40 @@
+@if(tests.length > 0){
+  <table mat-table [dataSource]="tests" class="exam-data-table">
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef> Subject </th>
+      <td mat-cell *matCellDef="let element"> {{element.subject.length === 0 ? "Nothing set" : element.subject}} </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> Type </th>
+      <td mat-cell *matCellDef="let element"> {{element.videocall ? 'Videocall' : 'Test'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startableFrom)}} </td>
+    </ng-container>
+    <ng-container matColumnDef="limit">
+      <th mat-header-cell *matHeaderCellDef> Limit </th>
+      <td mat-cell *matCellDef="let element"> {{element.students.length+'/'+element.limit}} </td>
+    </ng-container>
+    <ng-container matColumnDef="teacher">
+      <th mat-header-cell *matHeaderCellDef> Teacher </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="open">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        @if(!element.students.includes(authService.currentUserSignal()!.email)){
+          <button mat-button (click)="onApplyExam(element._id, element)">Apply</button>
+        }@else{
+          <button mat-button class="delete-button" (click)="onCancelExam(element._id, element)">Cancel</button>
+        }
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+}@else{
+  <div class="exam-data-table no-progress">
+    No exams are in progress
+  </div>
+}
