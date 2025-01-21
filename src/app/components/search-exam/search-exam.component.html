@@ -1,33 +1,34 @@
 <div class="search-bar">
   <div class="search-text">Search</div>
-  <form class="search-form">
+  <form class="search-form" (ngSubmit)="searchTests()" [formGroup]="searchForm">
     <div class="field-container">
       <mat-form-field class="form-field" appearance="outline">
         <mat-label>Subject</mat-label>
         <input type="text"
-               placeholder="Pick one"
                aria-label="Subject"
                matInput
-               [matAutocomplete]="auto">
+               [matAutocomplete]="auto"
+               formControlName="subject"
+               [required]="false">
         <mat-autocomplete #auto="matAutocomplete">
-          @for(subject of getSubjects(); track subject) {
-            <mat-option [value]="subject">{{subject}}</mat-option>
-          }
+          <mat-option *ngFor="let subject of filteredSubjects | async" [value]="subject">
+            {{ subject }}
+          </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <button mat-icon-button class="delete-button" type="button">
+      <button mat-icon-button class="delete-button" type="button" (click)="resetSubject()">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
     <div class="field-container">
       <mat-form-field class="form-field" appearance="outline">
         <mat-label>Exam date:</mat-label>
-        <input matInput placeholder="Exam date" [matDatepicker]="datePicker">
+        <input matInput placeholder="Exam date" [matDatepicker]="datePicker" formControlName="date" [required]="false">
         <mat-hint>YYYY.MM.DD.</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
       </mat-form-field>
-      <button mat-icon-button class="delete-button" type="button">
+      <button mat-icon-button class="delete-button" type="button" (click)="resetDate()">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -38,5 +39,4 @@
   @if(takeAbleExams){
     <app-show-exam [tests]="takeAbleExams"></app-show-exam>
   }
-
 </div>

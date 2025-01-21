@@ -59,4 +59,8 @@ html {
   @include mat.table-overrides((
     background-color: white,
   ));
+
+  @include mat.paginator-overrides((
+    container-background-color: white,
+  ));
 }

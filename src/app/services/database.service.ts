@@ -24,6 +24,17 @@ const CREATE_TEST = '/createInitialTest';
 const DELETE_TEST = '/deleteTest';
 const APPLY_TEST = '/applyToTest';
 const CANCEL_APPLY_TEST = '/cancelTestApplication';
+const GET_SUBJECT = '/getSubjects';
+const FINALIZE_TEST = '/finalizeTest';
+const GET_EXAM = '/getMyExams';
+const GET_TEACHER_EXAM = '/getTeacherExams';
+const CAN_TAKE_TEST = '/canTakeTest';
+const GET_EXAM_QUESTION = '/getExamQuestions';
+const SAVE_ANSWER = '/saveAnswer';
+const LOAD_ANSWER = '/loadAnswer';
+const START_TEST = '/startTest';
+const FINISH_TEST = '/finishTest';
+const ATTEND_CALL = '/attendVideoChat';
 
 @Injectable({
   providedIn: 'root'
@@ -165,6 +176,83 @@ export class DatabaseService {
 
   deleteTest(testId: string): Observable<any> {
     return this.http.post(API+DELETE_TEST, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  finalizeExam(testId: any){
+    return this.http.post(API+FINALIZE_TEST, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getSubjects():Observable<any> {
+    return this.http.get(API+GET_SUBJECT, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getAppliedExamAsTeacher(): Observable<any>{
+    return this.http.get(API+GET_TEACHER_EXAM, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getAppliedExams(): Observable<any> {
+    return this.http.get(API+GET_EXAM, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  canTakeTest(testId: any): Observable<any> {
+    return this.http.post(API+CAN_TAKE_TEST, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getExamQuestions(testId: any): Observable<any> {
+    return this.http.post(API+GET_EXAM_QUESTION, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  saveAnswer(testId: string, answer: any): Observable<any> {
+    return this.http.post(API+SAVE_ANSWER, {testId: testId, answer: answer}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  loadAnswer(questionId: any): Observable<any> {
+    return this.http.post(API+LOAD_ANSWER, {questionId: questionId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  startTest(testId: any): Observable<any> {
+    return this.http.post(API+START_TEST, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  finishTest(testId: any): Observable<any> {
+    return this.http.post(API+FINISH_TEST, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  attendVideoCall(testId: any): Observable<any> {
+    return this.http.post(API+ATTEND_CALL, {testId: testId}, {
       headers: { 'Content-Type': 'application/json'},
       observe: 'response',
       withCredentials: true}).pipe();

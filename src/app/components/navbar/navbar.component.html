@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="nav-content">
-    <button class="nav-element">
+    <button class="nav-element" routerLink="/myexams" routerLinkActive="active">
       <mat-icon class="nav-element-icon">library_books</mat-icon>
       <div class="nav-element-text">My exams</div>
     </button>
@@ -42,14 +42,14 @@
       <mat-icon class="nav-element-icon">bookmark_add</mat-icon>
       <div class="nav-element-text">Take exam</div>
     </button>
-    <button class="nav-element">
+    <button class="nav-element" routerLink="/results" routerLinkActive="active">
       <mat-icon class="nav-element-icon">trending_up</mat-icon>
       <div class="nav-element-text">Results</div>
     </button>
-    <button class="nav-element">
+    <!--<button class="nav-element">
       <mat-icon class="nav-element-icon">calendar_month</mat-icon>
       <div class="nav-element-text">Calendar</div>
-    </button>
+    </button>-->
     @if (authService.currentUserSignal()?.role === "admin"){
       <button class="nav-element" routerLink="/newexam" routerLinkActive="active">
         <mat-icon class="nav-element-icon">add</mat-icon>

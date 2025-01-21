@@ -10,9 +10,10 @@ import { WebrtcService } from '../../services/webrtc.service';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {AuthService} from '../../services/auth.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {ShowVideoComponent} from './show-video/show-video.component';
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-videochat',
@@ -33,9 +34,10 @@ export class VideochatComponent implements OnInit, OnDestroy {
   remoteSocket: string| null = null;
 
   activatedRoute= inject(ActivatedRoute);
-  cdr = inject(ChangeDetectorRef);
-
+  databaseService = inject(DatabaseService);
+  router = inject(Router);
   authService = inject(AuthService);
+
   room: any;
 
   alreadyConnected = false;
@@ -58,19 +60,34 @@ export class VideochatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.room = this.activatedRoute.snapshot.paramMap.get('id');
 
-    navigator.mediaDevices.getUserMedia({video: true, audio: true}).then( stream => {
-      this.localStream = stream;
-      this.webrtcService.localStream = stream;
-      console.log('LocalStream: ', stream);
-      this.webrtcService.joinRoom(this.room, this.authService.currentUserSignal()!.name);
-      /*stream.getTracks().forEach( track => {
-        this.webrtcService.localTrack = track;
-        this.webrtcService.peerConnection.addTrack(track, stream);
-      })*/
-      if(this.localVideo){
-        this.localVideo.nativeElement.srcObject = stream;
+    this.databaseService.canTakeTest(this.room).subscribe({
+      next: () => {
+        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then( stream => {
+          this.localStream = stream;
+          this.webrtcService.localStream = stream;
+          console.log('LocalStream: ', stream);
+          this.webrtcService.joinRoom(this.room, this.authService.currentUserSignal()!.name);
+          /*stream.getTracks().forEach( track => {
+            this.webrtcService.localTrack = track;
+            this.webrtcService.peerConnection.addTrack(track, stream);
+          })*/
+          if(this.localVideo){
+            this.localVideo.nativeElement.srcObject = stream;
+          }
+          if(this.authService.currentUserSignal()?.role === 'Student'){
+            this.databaseService.attendVideoCall(this.room).subscribe({})
+          }
+        });
+      },
+      error: err => {
+        this.stopCamera();
+        this.localStream = null;
+        alert(err.error.error);
+        this.router.navigate(['/']);
       }
-    });
+    })
+
+
 
     this.webrtcService.userDisconnected$.subscribe((disconnectedSocketId) => {
       // You can also remove their video stream or update the UI as needed

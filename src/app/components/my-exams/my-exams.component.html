@@ -1,1 +1,54 @@
-<p>my-exams works!</p>
+<div class="title-container">
+  My Exams:
+</div>
+<div class="exam-table">
+  @if(tests.length > 0){
+    <table mat-table [dataSource]="tests" class="exam-data-table" matSort>
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> Subject </th>
+        <td mat-cell *matCellDef="let element"> {{element.subject.length === 0 ? "Nothing set" : element.subject}} </td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.videocall ? 'Videocall' : 'Test'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="fromDate">
+        <th mat-header-cell *matHeaderCellDef> Startable</th>
+        <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startableFrom)}} </td>
+      </ng-container>
+      <ng-container matColumnDef="tillDate">
+        <th mat-header-cell *matHeaderCellDef >Can start till</th>
+        <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startableTill)}} </td>
+      </ng-container>
+      <ng-container matColumnDef="teacher">
+        <th mat-header-cell *matHeaderCellDef> Teacher </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="open">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          @if(getCurrentDate() >= convertToDate(element.startableFrom) &&
+          getCurrentDate() <= convertToDate(element.startableTill)){
+            @if(element.videocall){
+              <button mat-button (click)="onTake(element._id)">Join Call</button>
+            }@else{
+              <button mat-button (click)="onTake(element._id)">Take Test</button>
+            }
+          } @else if (!isAdmin && getCurrentDate() <= convertToDate(element.startableFrom)) {
+            <button mat-button class="delete-button">Cancel</button>
+          }
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+  }@else{
+    <div class="exam-data-table no-progress">
+      You dont have any exam right now!
+    </div>
+  }
+</div>

@@ -150,4 +150,52 @@ export class QuestionComponent implements OnInit {
     }, this.debounceTime);
   }
 
+  validate(): boolean{
+    if(this.question!.question.length < 3){
+      console.error("question length error");
+      return false;
+    }
+
+    if(!this.question!.options || this.question!.options.length < 4){
+      console.error("options length error");
+      return false;
+    }
+
+    if(this.question!.type === "multiple choice"){
+      for(let element of this.question!.options){
+        if(element.length < 3){
+          console.error("multiple choice text length error");
+          return false;
+        }
+      }
+
+      if(!this.question!.goodOption){
+        console.error("goodOption error");
+        return false;
+      }
+    }
+
+    if(this.question!.type === "yes or no"){
+      for(let element of this.question!.options){
+        //console.log('yes or no text length: ',element.text)
+        if(element.text.length < 3){
+          console.error("yer or no text length error");
+          return false;
+        }
+        console.log("yer or no element values: ", element.value);
+        if(element.value === "null"){
+          console.error("yer or no null value error");
+          return false;
+        }
+      }
+    }
+
+    if(this.question!.points < 1 || this.question!.points > 25){
+      console.error("points error");
+      return false;
+    }
+
+    return true
+  }
+
 }

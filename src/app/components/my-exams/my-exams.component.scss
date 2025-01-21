@@ -1,0 +1,40 @@
+.exam-table{
+  max-width: 70%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title-container{
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  max-width: 70%;
+  margin: 20px auto;
+  padding: 40px 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.delete-button{
+  color: red !important;
+
+  &:hover{
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+}
+
+.paginator{
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+.exam-data-table{
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  margin-top: 30px;
+}

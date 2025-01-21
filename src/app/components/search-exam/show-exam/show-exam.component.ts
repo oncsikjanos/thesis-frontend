@@ -5,13 +5,17 @@ import {AuthService} from '../../../services/auth.service';
 import {Router} from '@angular/router';
 import {Test} from '../../../model/Test';
 import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
 import {MatButtonModule} from '@angular/material/button';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-show-exam',
     imports: [
       MatTableModule,
       MatButtonModule,
+      MatPaginatorModule,
+      MatSortModule,
     ],
   templateUrl: './show-exam.component.html',
   styleUrl: './show-exam.component.scss'

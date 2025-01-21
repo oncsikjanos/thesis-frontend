@@ -1,0 +1,8 @@
+<mat-radio-group class="question-options" [(ngModel)]="goodAnswerIndex" (ngModelChange)="onGoodAnswerChange()">
+  @for (option of this.question!.options; let i = $index; track i) {
+    <div class="question-option" >
+      <mat-radio-button [value]="i"></mat-radio-button>
+      <div class="option-text">{{option}}</div>
+    </div>
+  }
+</mat-radio-group>

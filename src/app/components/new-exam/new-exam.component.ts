@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, isFormGroup, Validators} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +19,11 @@ import {Test} from '../../model/Test';
 import {DatabaseService} from '../../services/database.service';
 import {AuthService} from '../../services/auth.service';
 import { ActivatedRoute, Router} from '@angular/router';
+import {SnackbarComponent} from '../snackbar/snackbar.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {NgForOf} from '@angular/common';
+import {map, Observable, startWith} from 'rxjs';
+import { CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-new-exam',
@@ -37,7 +42,9 @@ import { ActivatedRoute, Router} from '@angular/router';
     MatTimepickerModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    NgForOf,
+    CommonModule,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -48,12 +55,15 @@ import { ActivatedRoute, Router} from '@angular/router';
   styleUrl: './new-exam.component.scss'
 })
 export class NewExamComponent implements OnInit {
+  @ViewChildren(QuestionComponent) questionComponents!: QueryList<QuestionComponent>;
+
   formBuilder = inject(FormBuilder);
   databaseService = inject(DatabaseService);
   authService = inject(AuthService);
   router = inject(Router);
   activatedRoute= inject(ActivatedRoute);
-
+  snackBar = inject(MatSnackBar)
+  filteredSubjects: Observable<string[]> = new Observable<string[]>();
   debounceTime: number = 1500;
   private debounceTimer: any;
 
@@ -63,8 +73,12 @@ export class NewExamComponent implements OnInit {
   videoCall = false;
   pointDeduction: boolean = false;
 
+  minDate = new Date();
+  // Set maximum date to 16 years ago (assuming minimum age is 16)
+  maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+
   examTypes: string[] = ['yes or no', 'multiple choice'];
-  subjects: string[] = ['Math', 'Science', 'History', 'English', 'Chemistry', 'Physics', 'Biology', 'Geography', 'Computer Science', 'Art', 'Music', 'Physical Education', 'Foreign Languages', 'Other'];
+  subjects: string[] = [];
   questions: string[] = [];
   selectedType: 'yes or no' | 'multiple choice' | null = null;
 
@@ -88,12 +102,13 @@ export class NewExamComponent implements OnInit {
               examStartTime: this.newTest!.startableFrom,
               examEndTime: this.newTest!.startableTill,
               examDuration: durationDate,
-              pointDeduction: this.newTest!.poinDeduction,
+              pointDeduction: this.newTest!.pointDeduction,
               limit: this.newTest!.limit,
               videocall: this.newTest!.videocall,
           }
           this.newExamForm.patchValue(setExamValues)
           console.log(setExamValues);
+          this.pointDeduction = this.newExamForm.controls['pointDeduction'].value > 0;
           this.newExamForm.valueChanges.subscribe((changes) => {
             this.onBasicTestFormChange();
           });
@@ -102,10 +117,24 @@ export class NewExamComponent implements OnInit {
           this.router.navigateByUrl('newexam');
         }
       });
+
+      this.filteredSubjects = this.newExamForm.get('subject')!.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value || ''))
+      );
+
     }
     console.log(this.newTest);
     // Track value changes on the whole form
-
+    this.databaseService.getSubjects().subscribe({
+      next: data => {
+        this.subjects = data.body.subjects;
+        console.log(data.body.subjects);
+      },
+      error: error => {
+        return [''];
+      }
+    })
   }
 
   constructor() {
@@ -123,10 +152,6 @@ export class NewExamComponent implements OnInit {
 
   getExamTypes(): string[] {
     return this.examTypes;
-  }
-
-  getSubjects(): string[] {
-    return this.subjects;
   }
 
   onNext() {
@@ -191,7 +216,7 @@ export class NewExamComponent implements OnInit {
       startableFrom: new Date(this.newExamForm.controls['examDate'].value),
       startableTill: new Date(this.newExamForm.controls['examDate'].value),
       duration: this.newExamForm.controls['examDuration'].value,
-      poinDeduction: this.newExamForm.controls['pointDeduction'].value,
+      pointDeduction: this.newExamForm.controls['pointDeduction'].value,
       videocall: this.newExamForm.controls['videocall'].value,
       limit: this.newExamForm.controls['limit'].value,
     }
@@ -213,4 +238,167 @@ export class NewExamComponent implements OnInit {
     });
   }
 
+  isVideoCall(){
+    return this.newExamForm.controls['videocall'].value;
+  }
+
+  minTillDate(){
+    return new Date (this.newExamForm.controls['examEndTime'].value);
+  }
+
+  finalizeExam(){
+    const from: Date = new Date(this.newExamForm.controls['examStartTime'].value);
+    const till: Date = new Date(this.newExamForm.controls['examEndTime'].value);
+
+    let newFormat = {
+      subject: this.newExamForm.controls['subject'].value,
+      startableFrom: new Date(this.newExamForm.controls['examDate'].value),
+      startableTill: new Date(this.newExamForm.controls['examDate'].value),
+      duration: this.newExamForm.controls['examDuration'].value,
+      pointDeduction: this.newExamForm.controls['pointDeduction'].value,
+      videocall: this.newExamForm.controls['videocall'].value,
+      limit: this.newExamForm.controls['limit'].value,
+    }
+
+    newFormat.startableFrom.setHours(from.getHours(), from.getMinutes())
+    newFormat.startableTill.setHours(till.getHours(), till.getMinutes());
+
+    if(!this.basicValidations(newFormat)){
+      return;
+    }
+
+    if(this.isVideoCall()){
+      this.databaseService.finalizeExam(this.newTest!._id).subscribe({
+        next: data => {
+          this.router.navigate(['myexams']);
+        },
+        error: error => {
+          this.createSnackbar(error.body.error, 'cancel', 'error')
+        }
+        }
+      );
+
+    }
+    else{
+      if(this.moreValidation(newFormat)){
+        this.databaseService.finalizeExam(this.newTest!._id).subscribe({
+            next: data => {
+              this.router.navigate(['myexams']);
+            },
+            error: error => {
+              this.createSnackbar(error.body.error, 'cancel', 'error')
+            }
+          }
+        );
+      }
+    }
+  }
+
+  basicValidations(videoCallFormat: any){
+    if(!this.validateSubjectLength(videoCallFormat.subject)){
+      this.createSnackbar('Subjects length is less than 3', 'cancel', 'error');
+      return false;
+    }
+
+    if(!this.validatuserCount(videoCallFormat.limit)){
+      this.createSnackbar('Valid user limit is between 20-100', 'cancel', 'error');
+      return false;
+    }
+
+    if(!this.validateStartDate(new Date(videoCallFormat.startableFrom))){
+       this.createSnackbar('Start date cant be in the past', 'cancel', 'error');
+       return false;
+    }
+
+    if(!this.validateEndDate(new Date(videoCallFormat.startableTill),new Date(videoCallFormat.startableFrom))){
+      this.createSnackbar('Exam end time cant be earlier than exam start time', 'cancel', 'error')
+      return false;
+    }
+
+    return true;
+  }
+
+  validateSubjectLength(subject:string): boolean{
+    return subject.length > 3;
+  }
+
+  validatuserCount(count:number){
+    return count >= 20 && count <= 100;
+  }
+
+  validateStartDate(date:Date){
+    return date > new Date();
+  }
+
+  validateEndDate(endDate:Date, startDate:Date){
+    return endDate > startDate;
+  }
+
+  validateDuration(duration:number){
+    return duration >= 15;
+  }
+
+  validatePointDeduction(point: number){
+    if(!this.pointDeduction){
+      return true;
+    }
+    return point >=0 && point <= 50;
+  }
+
+  validateQuestions(){
+    let allValid = true;
+    this.questionComponents.forEach((questionComponent) => {
+      const isValid = questionComponent.validate();
+      if (!isValid) {
+        allValid = false;
+      }
+    });
+    return allValid;
+  }
+
+  moreValidation(format:any){
+
+    if(!this.validateDuration(format.duration)){
+      this.createSnackbar('Duration at least has to be 15 mins', 'cancel', 'error')
+      return false;
+    }
+
+    if(!this.validatePointDeduction(format.pointDeduction)){
+      this.createSnackbar('Exam end time cant be earlier than exam start time', 'cancel', 'error')
+      return false;
+    }
+
+    if(!this.validateQuestions()){
+      alert("One or more questions are wrongly filled!\n" +
+        "Rules:\n" +
+        "Question and option text atleast 3 characters long.\n" +
+        "Atleast 4 option for every question\n" +
+        "For yes or no has to be picked yes or true\n" +
+        "For multiple choice only one good option|n" +
+        "One question can only worth between 1-15 points\n");
+      return false;
+    }
+
+    return true;
+  }
+
+  createSnackbar(message: string, icon: string, type: string){
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        message: message,
+        icon: icon,
+        class: type
+      },
+      duration: 1000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center'
+    });
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.subjects.filter(subject =>
+      subject.toLowerCase().includes(filterValue)
+    );
+  }
 }

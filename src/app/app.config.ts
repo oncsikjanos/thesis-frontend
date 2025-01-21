@@ -12,6 +12,9 @@ import {QuestionComponent} from './components/new-exam/question/question.compone
 import {MyProfileComponent} from './components/my-profile/my-profile.component';
 import {ExamManagementComponent} from './components/exam-management/exam-management.component';
 import {SearchExamComponent} from './components/search-exam/search-exam.component';
+import {MyExamsComponent} from './components/my-exams/my-exams.component';
+import {TakingExamComponent} from './components/taking-exam/taking-exam.component';
+import { ResultsComponent } from './components/results/results.component';
 
 export const routes: Routes = [
   {path: 'auth', component: AuthComponent, canActivate: [LoginGuard]},
@@ -23,6 +26,9 @@ export const routes: Routes = [
       {path: 'myprofile', component: MyProfileComponent},
       {path: 'newexam/:id', component: NewExamComponent},
       {path: 'searchexam', component: SearchExamComponent},
+      {path: 'myexams', component: MyExamsComponent},
+      {path: 'takeexam/:id', component: TakingExamComponent},
+      {path: 'results', component: ResultsComponent},
     ]
   },
   {path: 'question', component: QuestionComponent},

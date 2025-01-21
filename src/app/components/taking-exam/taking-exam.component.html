@@ -1,1 +1,38 @@
-<p>taking-exam works!</p>
+<div class="timer-finish-container">
+  <div class="subject-name">{{subject}}</div>
+  <div class="timer-button-container">
+    <div class="timer">{{timer}}</div>
+    <button mat-button class="finish-button" (click)="onFinish()">Finish</button>
+  </div>
+</div>
+<div class="questions-container">
+  @for(question of questions; let i = $index; track question;){
+    @if(question){
+      <mat-card class="question-container">
+        <mat-card-header matPrefix class="question-header">
+          <div class="question-title-container">
+            <div class="question-number-title-container">
+              <div class="question-number">{{i+1}}.</div>
+              <div class ="question-title">{{question.question}}</div>
+            </div>
+            <div class="question-point">
+              <div class="question-point-text">Points: {{question.points}}</div>
+            </div>
+          </div>
+          @if(question.picture){
+            <div class="question-image-container">
+              <img class="question-image" [src]="question.picture" alt="Question image">
+            </div>
+          }
+        </mat-card-header>
+        <mat-card-content class="question-content">
+          @if(question.type === 'multiple choice'){
+            <app-take-multiple [question]="question"></app-take-multiple>
+          }@else if(question.type === 'yes or no'){
+            <app-take-yes-no [question]="question"></app-take-yes-no>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>

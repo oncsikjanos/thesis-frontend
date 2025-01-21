@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 import {ShowExamComponent} from './show-exam/show-exam.component';
 import {DatabaseService} from '../../services/database.service';
+import {AsyncPipe, NgForOf} from '@angular/common';
+import {map, Observable, startWith} from 'rxjs';
 
 @Component({
   selector: 'app-search-exam',
@@ -21,6 +23,9 @@ import {DatabaseService} from '../../services/database.service';
     MatAutocompleteModule,
     MatIconModule,
     ShowExamComponent,
+    ReactiveFormsModule,
+    AsyncPipe,
+    NgForOf,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -31,8 +36,20 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class SearchExamComponent implements OnInit {
   databaseService = inject(DatabaseService)
+  formBuilder = inject(FormBuilder);
+
+  filteredSubjects: Observable<string[]> = new Observable<string[]>();
+  searchForm: FormGroup;
 
   takeAbleExams: any;
+  subjects: string[] = []
+
+  constructor() {
+    this.searchForm = this.formBuilder.group({
+      subject: ['', [Validators.required],],
+      date: ['', [Validators.required],]
+    });
+  }
 
   ngOnInit() {
     this.databaseService.getTakeAbleExams().subscribe({
@@ -41,10 +58,50 @@ export class SearchExamComponent implements OnInit {
         this.takeAbleExams = data.body.tests;
       }
     })
+
+    this.databaseService.getSubjects().subscribe({
+      next: data => {
+        this.subjects = data.body.subjects;
+        console.log(data.body.subjects);
+      },
+      error: error => {
+        return [''];
+      }
+    })
+
+    this.filteredSubjects = this.searchForm.get('subject')!.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
   }
 
-  getSubjects(){
-    return ['Math'];
+  searchTests(){
+    this.databaseService.getTakeAbleExams(this.searchForm.value.date, this.searchForm.value.subject).subscribe({
+      next: data => {
+        console.log(data.body);
+        this.takeAbleExams = data.body.tests;
+      }
+    })
+
+    console.log(this.searchForm.value)
   }
 
+  resetDate(){
+    this.searchForm.reset({
+      subject: '',
+    })
+  }
+
+  resetSubject(){
+    this.searchForm.reset({
+      date: '',
+    })
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.subjects.filter(subject =>
+      subject.toLowerCase().includes(filterValue)
+    );
+  }
 }

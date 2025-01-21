@@ -27,6 +27,9 @@ export class ShowExamComponent  implements OnInit {
     this.databaseService.getTestsInProgress().subscribe({
       next: data => {
         this.receivedTest = data.body.tests;
+      },
+      error: err => {
+        this.router.navigate(['/']);
       }
     });
   }

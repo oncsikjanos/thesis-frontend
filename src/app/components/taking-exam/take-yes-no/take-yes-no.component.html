@@ -1,0 +1,27 @@
+<div class="question-options">
+  @for (option of this.question!.options; let i = $index; track i) {
+    <div class="question-option" >
+      <div class="button-toggle-group">
+        <mat-button-toggle-group
+          name="optionValue"
+          aria-label="Option Value"
+          hideSingleSelectionIndicator="true"
+          [(ngModel)]="this.answers[option]"
+          [value]="this.answers[option]"
+          (ngModelChange)="onValueChange()">
+          <mat-button-toggle [value]="true">
+            <mat-icon>check</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="null">
+            <mat-icon>question_mark</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [value]="false">
+            <mat-icon>close</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div class="option-text">{{option}}</div>
+    </div>
+  }
+</div>
+

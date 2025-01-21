@@ -34,7 +34,7 @@
           }
         </div>
         <div class="chat-message-send">
-          <input class="message-input" type="text" [(ngModel)]="message">
+          <input class="message-input" type="text" [(ngModel)]="message" (keydown.enter)="sendMessage()">
           <button mat-flat-button class="send-message-button" (click)="sendMessage()">Send</button>
         </div>
       </div>

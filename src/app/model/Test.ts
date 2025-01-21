@@ -7,7 +7,7 @@ export interface Test {
   startableFrom: Date,
   startableTill: Date,
   duration: number,
-  poinDeduction: number | null,
+  pointDeduction: number | null,
   videocall : boolean,
   questions: string[],
   students: string[],

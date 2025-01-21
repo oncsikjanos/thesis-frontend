@@ -5,6 +5,7 @@ import {DatabaseService} from '../../services/database.service';
 import {ShowExamComponent} from './show-exam/show-exam.component';
 import {MatCardModule} from '@angular/material/card';
 import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-exam-management',
@@ -18,6 +19,7 @@ import {Router} from '@angular/router';
   styleUrl: './exam-management.component.scss'
 })
 export class ExamManagementComponent implements OnInit {
+  authService = inject(AuthService);
   databaseService = inject(DatabaseService)
   router = inject(Router);
 
@@ -28,6 +30,10 @@ export class ExamManagementComponent implements OnInit {
     this.databaseService.getTestsInProgress().subscribe({
       next: data => {
         this.myTestsInProgress = data.body.tests;
+      },
+      error: err => {
+        this.authService.logout();
+        this.router.navigate(['/']);
       }
     })
   }
@@ -39,6 +45,7 @@ export class ExamManagementComponent implements OnInit {
       },
       error: error => {
         console.log(error);
+        this.router.navigate(['/newexam']);
       }
     })
   }

@@ -1,5 +1,5 @@
 @if(tests.length > 0){
-  <table mat-table [dataSource]="tests" class="exam-data-table">
+  <table mat-table [dataSource]="tests" class="exam-data-table" matSort>
     <ng-container matColumnDef="subject">
       <th mat-header-cell *matHeaderCellDef> Subject </th>
       <td mat-cell *matCellDef="let element"> {{element.subject.length === 0 ? "Nothing set" : element.subject}} </td>
@@ -9,7 +9,7 @@
       <td mat-cell *matCellDef="let element"> {{element.videocall ? 'Videocall' : 'Test'}} </td>
     </ng-container>
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
       <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startableFrom)}} </td>
     </ng-container>
     <ng-container matColumnDef="limit">
@@ -33,6 +33,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
 }@else{
   <div class="exam-data-table no-progress">
     No exams are in progress
