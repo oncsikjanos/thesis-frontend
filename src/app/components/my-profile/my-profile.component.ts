@@ -7,6 +7,8 @@ import {FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule} fr
 import {NgOptimizedImage} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {DatabaseService} from '../../services/database.service';
+import {SnackbarComponent} from '../snackbar/snackbar.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-my-profile',
@@ -27,6 +29,7 @@ export class MyProfileComponent implements OnInit {
   authService = inject(AuthService);
   formBuilder: FormBuilder = inject(FormBuilder);
   databaseService = inject(DatabaseService);
+  snackbar = inject(MatSnackBar)
 
   updateForm: FormGroup;
   userBeforeModify : User | null | undefined = this.authService.currentUserSignal();
@@ -95,8 +98,25 @@ export class MyProfileComponent implements OnInit {
       this.uploadFormData.append('pfp', this.selectedPicture);
     }
     this.uploadFormData.append('user', JSON.stringify(userData));
-    this.databaseService.updateUserData(this.uploadFormData).subscribe();
+    this.databaseService.updateUserData(this.uploadFormData).subscribe({
+      next: data => {
+        this.createSnackbar('Successful update!', 'check', 'success');
+      }
+    });
     console.log(this.uploadFormData)
+  }
+
+  createSnackbar(message: string, icon: string, type: string){
+    this.snackbar.openFromComponent(SnackbarComponent, {
+      data: {
+        message: message,
+        icon: icon,
+        class: type
+      },
+      duration: 1000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center'
+    });
   }
 
 }

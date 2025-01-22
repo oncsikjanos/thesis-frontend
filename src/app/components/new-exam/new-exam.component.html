@@ -76,28 +76,30 @@
     </mat-step>
     @if(!isVideoCall()){
       <mat-step label="Exam questions">
-        <mat-expansion-panel class="question-add-panel" hideToggle>
-          <mat-expansion-panel-header>
-            <mat-icon class="add-question-icon">quiz</mat-icon>
-            <div class="gapper"></div>
-            <div class="add-question-title">Add a new question</div>
-          </mat-expansion-panel-header>
-          <div class="add-question">
-            <form class="add-question-form" (ngSubmit)="addNewQuestion()">
-              <mat-form-field class="add-question-form-field" appearance="outline" style="margin-bottom: -1.25em">
-                <mat-label>Exam type</mat-label>
-                <mat-select name="typeSelect" [(ngModel)]="selectedType">
-                  @for (examType of getExamTypes(); track examType) {
-                    <mat-option [value]="examType">{{examType}}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              <button mat-icon-button type="submit" class="add-question-form-submit-button">
-                <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
-              </button>
-            </form>
-          </div>
-        </mat-expansion-panel>
+        <div class="sticky-wrapper">
+          <mat-expansion-panel class="question-add-panel sticky-panel" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-icon class="add-question-icon">quiz</mat-icon>
+              <div class="gapper"></div>
+              <div class="add-question-title">Add a new question</div>
+            </mat-expansion-panel-header>
+            <div class="add-question">
+              <form class="add-question-form" (ngSubmit)="addNewQuestion()">
+                <mat-form-field class="add-question-form-field" appearance="outline" style="margin-bottom: -1.25em">
+                  <mat-label>Exam type</mat-label>
+                  <mat-select name="typeSelect" [(ngModel)]="selectedType">
+                    @for (examType of getExamTypes(); track examType) {
+                      <mat-option [value]="examType">{{examType}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <button mat-icon-button type="submit" class="add-question-form-submit-button">
+                  <mat-icon class="add-question-form-submit-button-icon">add</mat-icon>
+                </button>
+              </form>
+            </div>
+          </mat-expansion-panel>
+        </div>
         <div class="gapper"></div>
         <div class="questions-container">
           @for (questionId of questions; let i = $index; track questionId) {

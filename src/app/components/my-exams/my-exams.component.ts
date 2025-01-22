@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
-import {Observable} from 'rxjs';
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule} from '@angular/material/paginator';
@@ -91,6 +90,26 @@ export class MyExamsComponent implements OnInit {
         }else{
           this.router.navigate(['/takeexam/'+testId]);
         }
+      }
+    })
+  }
+
+  onCancel(id:any){
+    this.databaseService.cancelExam(id).subscribe({
+      next: data => {
+        this.databaseService.getAppliedExams().subscribe({
+          next: data => {
+            this.tests = data.body.tests.sort(
+              (a: any, b: any) => new Date(a.startableFrom).getTime() - new Date(b.startableFrom).getTime()
+            );
+            //this.tests = data.body.tests;
+            console.log(data.body.tests)
+          }
+        })
+        console.log(data.body)
+      },
+      error: err => {
+        console.log(err.body);
       }
     })
   }

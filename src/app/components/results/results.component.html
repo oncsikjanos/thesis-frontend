@@ -1,1 +1,35 @@
-<p>results works!</p>
+<div class="title-container">
+  My Results:
+</div>
+<div class="exam-table">
+  @if(results && results.length > 0){
+    <table mat-table [dataSource]="results" class="exam-data-table">
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> Subject </th>
+        <td mat-cell *matCellDef="let element"> {{element.subject.length === 0 ? "Nothing set" : element.subject}} </td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date</th>
+        <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startTill)}} </td>
+      </ng-container>
+      <ng-container matColumnDef="teacher">
+        <th mat-header-cell *matHeaderCellDef> Teacher </th>
+        <td mat-cell *matCellDef="let element"> {{element.teacher}} </td>
+      </ng-container>
+      <ng-container matColumnDef="result">
+        <th mat-header-cell *matHeaderCellDef> Result (%) </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="getResultClass(element.show)"> {{element.show}}  </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Results">
+    </mat-paginator>
+  }@else{
+    <div class="exam-data-table no-progress">
+      You dont have any results!
+    </div>
+  }
+</div>

@@ -35,7 +35,7 @@
               <button mat-button (click)="onTake(element._id)">Take Test</button>
             }
           } @else if (!isAdmin && getCurrentDate() <= convertToDate(element.startableFrom)) {
-            <button mat-button class="delete-button">Cancel</button>
+            <button mat-button class="delete-button" (click)="onCancel(element._id)">Cancel</button>
           }
         </td>
       </ng-container>

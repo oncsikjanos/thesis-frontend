@@ -1,0 +1,75 @@
+.exam-table{
+  max-width: 70%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title-container{
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  max-width: 70%;
+  margin: 20px auto;
+  padding: 40px 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.paginator{
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+.exam-data-table{
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  margin-top: 30px;
+}
+
+
+.red-text {
+  color: red;
+  font-weight: bold;
+}
+
+.orange-text {
+  color: orange;
+  font-weight: bold;
+}
+
+.yellow-text {
+  color: yellow;
+  font-weight: bold;
+}
+
+.light-green-text {
+  color: #32CD32;
+  font-weight: bold;
+}
+
+.green-text {
+  color: green;
+  font-weight: bold;
+}
+
+.exam-data-table{
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.no-progress {
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  font-weight: bold;
+}

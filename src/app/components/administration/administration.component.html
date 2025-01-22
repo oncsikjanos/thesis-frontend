@@ -1,11 +1,134 @@
-<mat-tab-group>
-    <mat-tab label="Admins">
-        <h1>Administration</h1>
+<mat-tab-group >
+    <mat-tab class="tab-group" label="Manage admins">
+      <div class="search-input">
+        <div class="title-container">
+          Users:
+        </div>
+        <form class="search-form" [formGroup]="adminForm">
+          <div class="field-container">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input type="text"
+                     aria-label="Subject"
+                     matInput
+                     formControlName="name"
+                     [required]="false">
+              <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="field-container">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="email"
+                     aria-label="Subject"
+                     matInput
+                     formControlName="email"
+                     [required]="false">
+              <mat-icon matPrefix>mail</mat-icon>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+      <div class="exam-table">
+        @if(users.length > 0){
+          <table mat-table [dataSource]="filteredUsers" class="exam-data-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef> Email </th>
+              <td mat-cell *matCellDef="let element">{{element.email}}</td>
+            </ng-container>
+            <ng-container matColumnDef="role">
+              <th mat-header-cell *matHeaderCellDef> Role </th>
+              <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+            </ng-container>
+            <ng-container matColumnDef="button">
+              <th mat-header-cell *matHeaderCellDef ></th>
+              <td mat-cell *matCellDef="let element">
+                @if(element.role === 'admin'){
+                  <button mat-button (click)="revoke(element.email)" style="color: red">Revoke</button>
+                }@else{
+                  <button mat-button (click)="makeAdmin(element.email)">Make admin</button>
+                }
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="adminColums"></tr>
+            <tr mat-row *matRowDef="let row; columns: adminColums;"></tr>
+          </table>
+          <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        }@else{
+          <div class="exam-data-table no-progress">
+            Something went wrong!
+          </div>
+        }
+      </div>
     </mat-tab>
-    <mat-tab label="Students">
-        <h1>Students</h1>
-    </mat-tab>
-    <mat-tab label="Exams">
-        <h1>Exams</h1>
+    <mat-tab class="tab-group" label="Add result">
+      <div class="search-input">
+        <div class="title-container">
+          Add result:
+        </div>
+        <form class="search-form" [formGroup]="resultForm">
+          <div class="field-container">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Subject</mat-label>
+              <input type="text"
+                     aria-label="Subject"
+                     matInput
+                     formControlName="subject"
+                     [required]="false">
+            </mat-form-field>
+          </div>
+          <div class="field-container">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Exam date:</mat-label>
+              <input matInput placeholder="Exam date" [matDatepicker]="datePicker" formControlName="date" [required]="false">
+              <mat-hint>YYYY.MM.DD.</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+      <div class="exam-table">
+        @if(results.length > 0){
+          <table mat-table [dataSource]="filteredResults" class="exam-data-table">
+            <ng-container matColumnDef="subject">
+              <th mat-header-cell *matHeaderCellDef> Subject </th>
+              <td mat-cell *matCellDef="let element">{{ element.subject }}</td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef> Date </th>
+              <td mat-cell *matCellDef="let element"> {{convertDateFormat(element.startTill)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="student">
+              <th mat-header-cell *matHeaderCellDef> Student </th>
+              <td mat-cell *matCellDef="let element">{{ element.student }}</td>
+            </ng-container>
+            <ng-container matColumnDef="result">
+              <th mat-header-cell *matHeaderCellDef > Set result</th>
+              <td mat-cell *matCellDef="let element">
+                <input class="input-style" type="number" min="0" max="100" [(ngModel)]="newResults[element.student]">
+                <button mat-button (click)="setResult(newResults[element.student], element._id)">Set</button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="resultColums"></tr>
+            <tr mat-row *matRowDef="let row; columns: resultColums;"></tr>
+          </table>
+          <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        }@else{
+          <div class="exam-data-table no-progress">
+           Nothing left to do!
+          </div>
+        }
+      </div>
     </mat-tab>
 </mat-tab-group>

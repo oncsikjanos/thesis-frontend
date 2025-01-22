@@ -35,6 +35,12 @@ const LOAD_ANSWER = '/loadAnswer';
 const START_TEST = '/startTest';
 const FINISH_TEST = '/finishTest';
 const ATTEND_CALL = '/attendVideoChat';
+const GET_RESULT = '/getResult';
+const GET_USERS = '/getUsers';
+const UN_VALUATED_RESULTS = '/getUnValuatedResults'
+const MAKE_ADMIN = '/makeAdmin'
+const MAKE_STUDENT = '/makeStudent'
+const SET_RESULT = '/setResult';
 
 @Injectable({
   providedIn: 'root'
@@ -253,6 +259,48 @@ export class DatabaseService {
 
   attendVideoCall(testId: any): Observable<any> {
     return this.http.post(API+ATTEND_CALL, {testId: testId}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getResult(): Observable<any> {
+    return this.http.get(API+GET_RESULT,{
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getUsers() : Observable<any> {
+    return this.http.get(API+GET_USERS,{
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  getUnValuatedResults(): Observable<any> {
+    return this.http.get(API+UN_VALUATED_RESULTS,{
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  makeAdmin(email: any): Observable<any> {
+    return this.http.post(API+MAKE_ADMIN, {email: email}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  makeStudent(email:any): Observable<any> {
+    return this.http.post(API+MAKE_STUDENT, {email: email}, {
+      headers: { 'Content-Type': 'application/json'},
+      observe: 'response',
+      withCredentials: true}).pipe();
+  }
+
+  setResult(result: any, id: any): Observable<any> {
+    return this.http.post(API+SET_RESULT, {result: result, id: id}, {
       headers: { 'Content-Type': 'application/json'},
       observe: 'response',
       withCredentials: true}).pipe();

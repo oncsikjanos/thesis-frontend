@@ -88,3 +88,22 @@ mat-stepper {
   width: 100%;
   margin: 20px auto;
 }
+
+.exam-basic-informations-form-submit-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.sticky-wrapper {
+  position: relative;
+}
+
+.sticky-panel {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
