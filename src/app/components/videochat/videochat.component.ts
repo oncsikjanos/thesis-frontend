@@ -74,7 +74,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
           if(this.localVideo){
             this.localVideo.nativeElement.srcObject = stream;
           }
-          if(this.authService.currentUserSignal()?.role === 'Student'){
+          if(this.authService.currentUserSignal()?.role.toLowerCase() === 'student'){
             this.databaseService.attendVideoCall(this.room).subscribe({})
           }
         });

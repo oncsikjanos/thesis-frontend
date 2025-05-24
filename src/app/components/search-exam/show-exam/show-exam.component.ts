@@ -1,13 +1,13 @@
-import {Component, inject, Input} from '@angular/core';
+import {AfterViewInit, Component, inject, Input, OnInit, ViewChild} from '@angular/core';
 
 import {DatabaseService} from '../../../services/database.service';
 import {AuthService} from '../../../services/auth.service';
 import {Router} from '@angular/router';
 import {Test} from '../../../model/Test';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatButtonModule} from '@angular/material/button';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-show-exam',
@@ -20,14 +20,24 @@ import {MatPaginatorModule} from '@angular/material/paginator';
   templateUrl: './show-exam.component.html',
   styleUrl: './show-exam.component.scss'
 })
-export class ShowExamComponent {
-
+export class ShowExamComponent implements AfterViewInit, OnInit{
+  @ViewChild('paginator') paginator!: MatPaginator;
   @Input() tests: any;
+
   databaseService = inject(DatabaseService);
   authService = inject(AuthService);
   router = inject(Router);
+  showSource =new MatTableDataSource<any>();
   //receivedTest: Test[] = [];
   displayedColumns: string[] = ['subject', 'type', 'date', 'limit', 'teacher', 'open'];
+
+  ngAfterViewInit() {
+    this.showSource.paginator = this.paginator;
+  }
+
+  ngOnInit() {
+    this.showSource.data = this.tests;
+  }
 
   onApplyExam(id: string, test: any){
     this.databaseService.applyExam(id).subscribe({

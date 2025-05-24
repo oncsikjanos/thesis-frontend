@@ -101,6 +101,26 @@ export class MyProfileComponent implements OnInit {
     this.databaseService.updateUserData(this.uploadFormData).subscribe({
       next: data => {
         this.createSnackbar('Successful update!', 'check', 'success');
+
+        this.databaseService.getUser().subscribe({
+          next: (stateMessage) => {
+            if(stateMessage.body.success && stateMessage.status == 202){
+              console.log(stateMessage.body);
+              this.authService.currentUserSignal.set({
+                email: stateMessage.body.user.email,
+                name: stateMessage.body.user.name,
+                dateOfBirth: stateMessage.body.user.dateOfBirth,
+                role: stateMessage.body.user.role,
+                pfp: stateMessage.body.user.pfp,
+                description: stateMessage.body.user.description,
+              });
+            }
+          },
+          error: () => {
+            this.authService.currentUserSignal.set(null);
+          }
+        });
+        
       }
     });
     console.log(this.uploadFormData)

@@ -16,9 +16,14 @@ export class AppComponent {
   router = inject(Router);
 
   ngOnInit(){
+    this.getUserData();
+  }
+
+  private getUserData(){
     this.dbService.getUser().subscribe({
       next: (stateMessage) => {
         if(stateMessage.body.success && stateMessage.status == 202){
+          console.log(stateMessage.body);
           this.authService.currentUserSignal.set({
             email: stateMessage.body.user.email,
             name: stateMessage.body.user.name,

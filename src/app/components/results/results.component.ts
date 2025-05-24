@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {NgClass} from '@angular/common';
 
 @Component({
@@ -14,13 +14,19 @@ import {NgClass} from '@angular/common';
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent implements OnInit, AfterViewInit {
+  @ViewChild('paginator') paginator!: MatPaginator
   databaseSerivce = inject(DatabaseService)
 
   results: any;
+  resultSource = new MatTableDataSource<any>();
 
   displayedColumns: string[] = ['subject', 'date',  'teacher', 'result'];
 
+
+  ngAfterViewInit() {
+    this.resultSource.paginator = this.paginator;
+  }
 
   ngOnInit() {
     this.databaseSerivce.getResult().subscribe({
@@ -28,6 +34,7 @@ export class ResultsComponent implements OnInit {
         this.results = results.body.results.sort(
           (a: any, b: any) => new Date(b.startTill).getTime() - new Date(a.startTill).getTime()
         );
+        this.resultSource.data = this.results;
         console.log(results.body.results);
       },
       error: err => {

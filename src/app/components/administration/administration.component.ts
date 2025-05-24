@@ -1,6 +1,6 @@
-import {Component, inject, OnInit} from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule} from '@angular/material/tabs';
 import {DatabaseService} from '../../services/database.service';
@@ -38,7 +38,10 @@ import {SnackbarComponent} from '../snackbar/snackbar.component';
   templateUrl: './administration.component.html',
   styleUrl: './administration.component.scss'
 })
-export class AdministrationComponent implements OnInit {
+export class AdministrationComponent implements OnInit, AfterViewInit {
+  @ViewChild('usersPaginator') usersPaginator!: MatPaginator;
+  @ViewChild('resultsPaginator') resultsPaginator!: MatPaginator;
+
   databaseService = inject(DatabaseService);
   formBuilder = inject(FormBuilder)
   snackBar = inject(MatSnackBar)
@@ -53,8 +56,8 @@ export class AdministrationComponent implements OnInit {
   adminForm: FormGroup;
   resultForm: FormGroup;
 
-  filteredUsers: any;
-  filteredResults: any;
+  filteredUsers = new MatTableDataSource<any>();
+  filteredResults = new MatTableDataSource<any>();
 
   constructor() {
     this.adminForm = this.formBuilder.group({
@@ -75,8 +78,7 @@ export class AdministrationComponent implements OnInit {
     this.databaseService.getUsers().subscribe({
       next: data => {
         this.users = data.body.users;
-        this.filteredUsers = [...this.users]
-        console.log(this.users)
+        this.filteredUsers.data = this.users;
         },
       error: err => {
         console.error(err.error);
@@ -86,13 +88,19 @@ export class AdministrationComponent implements OnInit {
     this.databaseService.getUnValuatedResults().subscribe({
       next: data => {
         this.results = data.body.results;
-        this.filteredResults = [...this.results];
-        console.log(this.results)
+        this.filteredResults.data = this.results;
       },
       error: err => {
         console.error(err.error);
       }
     })
+  }
+
+  ngAfterViewInit() {
+    // Attach the paginators after the view initializes
+    this.filteredUsers.paginator = this.usersPaginator;
+    this.filteredResults.paginator = this.resultsPaginator;
+    console.log(this.usersPaginator);
   }
 
   convertDateFormat(date: string){
@@ -104,34 +112,27 @@ export class AdministrationComponent implements OnInit {
   filterAdmins() {
     const { name, email } = this.adminForm.value;
 
-    this.filteredUsers = this.users.filter((user: { name: string; email: string; }) => {
+    const filteredData = this.users.filter((user: { name: string; email: string }) => {
       return (
         (!name || user.name.toLowerCase().includes(name.toLowerCase())) &&
         (!email || user.email.toLowerCase().includes(email.toLowerCase()))
       );
     });
 
-    if (!name && !email) {
-      this.filteredUsers = [...this.users];
-    }
-
+    this.filteredUsers.data = filteredData;
   }
 
   filterResults() {
     const { subject, date } = this.resultForm.value;
 
-    this.filteredResults = this.results.filter((result: { subject: string; startTill: string; }) => {
+    const filteredData = this.results.filter((result: { subject: string; startTill: string }) => {
       return (
         (!subject || result.subject.toLowerCase().includes(subject.toLowerCase())) &&
         (!date || new Date(result.startTill).toDateString() === new Date(date).toDateString())
       );
-
     });
 
-    if (!subject && !date) {
-      this.filteredResults = [...this.results];
-    }
-
+    this.filteredResults.data = filteredData;
   }
 
   makeAdmin(email: any){

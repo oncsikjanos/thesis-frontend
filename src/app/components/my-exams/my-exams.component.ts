@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import { MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
@@ -21,14 +21,17 @@ import {AuthService} from '../../services/auth.service';
   templateUrl: './my-exams.component.html',
   styleUrl: './my-exams.component.scss'
 })
-export class MyExamsComponent implements OnInit {
+export class MyExamsComponent implements OnInit, AfterViewInit {
+  @ViewChild('paginator') paginator!: MatPaginator;
+
   databaseService = inject(DatabaseService)
   authService = inject(AuthService)
   router = inject(Router);
 
   isAdmin: boolean = this.authService.currentUserSignal()!.role === 'admin';
 
-  tests: any[] = [];
+  dataTest= new MatTableDataSource<any>();
+  tests= [];
   takeAbleExams: any;
   subjects: string[] = []
   displayedColumns: string[] = ['subject', 'type', 'fromDate', 'tillDate', 'teacher', 'open'];
@@ -43,6 +46,7 @@ export class MyExamsComponent implements OnInit {
           this.tests = data.body.tests.sort(
             (a: any, b: any) => new Date(a.startableFrom).getTime() - new Date(b.startableFrom).getTime()
           );
+          this.dataTest.data = this.tests;
           //this.tests = data.body.tests;
           console.log(data.body.tests)
         },
@@ -57,6 +61,7 @@ export class MyExamsComponent implements OnInit {
             (a: any, b: any) => new Date(a.startableFrom).getTime() - new Date(b.startableFrom).getTime()
           );
           //this.tests = data.body.tests;
+          this.dataTest.data = this.tests;
           console.log(data.body.tests)
         },
         error: error => {
@@ -64,6 +69,11 @@ export class MyExamsComponent implements OnInit {
         }
       });
     }
+  }
+
+  ngAfterViewInit() {
+    // Attach the paginators after the view initializes
+    this.dataTest.paginator = this.paginator;
   }
 
   convertDateFormat(date: string){

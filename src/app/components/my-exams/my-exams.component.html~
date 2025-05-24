@@ -2,7 +2,7 @@
   My Exams:
 </div>
 <div class="exam-table">
-  @if(tests && tests.length > 0){
+  @if(tests.length > 0){
     <table mat-table [dataSource]="dataTest" class="exam-data-table" matSort>
       <ng-container matColumnDef="subject">
         <th mat-header-cell *matHeaderCellDef> Subject </th>
